@@ -1,4 +1,4 @@
-````markdown
+
 # Compiler Project
 
 Este projeto implementa um compilador simples em Java, organizado em módulos de análise léxica, sintática e semântica, seguindo boas práticas e padrões de projeto.
