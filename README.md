@@ -1,42 +1,55 @@
-Gerar o Jar:
+````markdown
+# Compiler Project
 
-Compile :
- 
+Este projeto implementa um compilador simples em Java, organizado em módulos de análise léxica, sintática e semântica, seguindo boas práticas e padrões de projeto.
+
+---
+
+## Como Gerar e Executar o Jar
+
+### 1. Compilar o código
+
+```bash
 javac -d out src/*.java
+```
+````
 
-Gere o jar:
+### 2. Gerar o arquivo JAR
 
+```bash
 jar cfm MeuPrograma.jar MANIFEST.MF -C out .
+```
 
-Execute o Jar:
+### 3. Executar o programa
 
+```bash
 java -jar MeuPrograma.jar
+```
 
+---
 
+## Padrões de Projeto Utilizados
 
-Padrões de Projeto Sugeridos :
+- **Lexer**
 
-Lexer
+  - Lê o código fonte caractere a caractere e gera tokens.
+  - Utiliza **Factory** para instanciar diferentes tipos de tokens.
 
-Lê o código fonte caractere a caractere e gera tokens.
+- **Parser**
 
-Usa Factory para instanciar tokens diferentes.
+  - Constrói a **AST (Abstract Syntax Tree)**.
+  - Utiliza o **Visitor** para percorrer a árvore.
 
-Parser
+- **SemanticAnalyzer**
 
-Constrói a AST (Abstract Syntax Tree).
+  - Verifica tipos, variáveis não declaradas, etc.
+  - Utiliza **SymbolTable (Tabela de Símbolos)** para gerenciar contexto.
 
-Usa Padrão Visitor para percorrer a árvore.
+---
 
-SemanticAnalyzer
+## Estrutura de Pastas
 
-Verifica tipos, variáveis não declaradas, etc.
-
-Usa SymbolTable (tabela de símbolos).
-
-
-Estrutura das Pastas:
-
+```
 compiler/
 │── src/
 │   ├── lexer/               # Analisador Léxico
@@ -48,7 +61,7 @@ compiler/
 │   ├── parser/              # Analisador Sintático
 │   │   ├── Parser.java
 │   │   ├── ASTNode.java
-│   │   ├── nodes/           # Nós da árvore sintática abstrata
+│   │   ├── nodes/           # Nós da AST
 │   │   │   ├── BinaryOpNode.java
 │   │   │   ├── NumberNode.java
 │   │   │   └── IdentifierNode.java
@@ -64,7 +77,7 @@ compiler/
 │   │   ├── ErrorHandler.java
 │   │   └── Logger.java
 │   │
-│   └── Main.java        # Classe principal
+│   └── Main.java            # Classe principal
 │
 └── tests/                   # Testes unitários
     ├── lexer/
@@ -72,4 +85,20 @@ compiler/
     ├── semantic/
     ├── optimizer/
     └── codegen/
+```
 
+---
+
+## Próximos Passos
+
+- [ ] Implementar otimizador de código
+- [ ] Implementar gerador de código
+- [ ] Adicionar mais casos de teste
+
+---
+
+## Observações
+
+- O projeto segue uma arquitetura modular.
+- Padrões de projeto aplicados ajudam na extensibilidade do compilador.
+- Recomenda-se manter testes unitários atualizados conforme novas funcionalidades forem adicionadas.
