@@ -5,12 +5,10 @@ import lexer.value.Value;
 public class Token {
     private TokenType type;
     private Value value;
-    private String lexeme;
 
-    public Token(TokenType type, Value value, String lexeme) {
+    public Token(TokenType type, Value value) {
         this.type = type;
         this.value = value;
-        this.lexeme = lexeme;
     }
 
     public TokenType getType() {
@@ -27,14 +25,6 @@ public class Token {
 
     public void setValue(Value value) {
         this.value = value;
-    }
-
-    public String getLexeme() {
-        return lexeme;
-    }
-
-    public void setLexeme(String lexeme) {
-        this.lexeme = lexeme;
     }
 
 }

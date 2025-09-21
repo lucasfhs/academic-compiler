@@ -8,7 +8,7 @@ public class TokenFactory {
 
     public static Token createToken(TokenType type, String lexeme) {
         Value value = createValueForToken(type, lexeme);
-        return new Token(type, value, lexeme);
+        return new Token(type, value);
     }
 
     private static Value createValueForToken(TokenType type, String lexeme) {
