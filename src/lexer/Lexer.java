@@ -48,16 +48,133 @@ public class Lexer implements AutoCloseable {
 
     public Token scan() throws Exception {
         // - BASE-
-        // Token token = new Token("", Token.Type.END_OF_FILE, null);
         SourcePosition startPosition = reader.getCurrentPosition();
+        StringBuilder lexeme = new StringBuilder();
+        Token token = new Token(TokenType.EOF, null);
 
         int state = 1;
         while (state != 14 && state != 15) {
+            int c = getc();
             // UTILIZACAO DO AFD
 
             switch (state) {
+                case 1:
+                    if (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
+                        state = 1;
+                    } else if (c == -1) {
+                        token.setType(TokenType.EOF);
+                        state = 101;
+                    } else if (c == '"') {
+                        state = 2; // literal string
+                    } else if (c == '_' || Character.isLetter(c)) {
+                        lexeme.append((char) c);
+                        state = 3; // identificador ou palavra-chave
+                    } else if (Character.isDigit(c) || c == '-') {
+                        lexeme.append((char) c);
+                        state = 4; // número inteiro ou float
+                    } else if (c == '!' || c == '=' || c == '>' || c == '<' || c == '&' || c == '|') {
+                        lexeme.append((char) c);
+                        state = 5; // operadores compostos
+                    } else if (c == '+' || c == '*' || c == '/' ||
+                               c == '(' || c == ')' || c == '{' ||
+                               c == '}' || c == ',' || c == ';') {
+                        lexeme.append((char) c);
+                        state = 100; // delimitador simples
+                    } else {
+                        lexeme.append((char) c);
+                        token.setType(TokenType.ERROR);
+                        state = 101;
+                    }
+                    break;
+
+                case 2: // literal string
+                    if (c == '"') {
+                        token.setType(TokenType.STRING);
+                        state = 101;
+                    } else if (c == -1) {
+                        token.setType(TokenType.EOF);
+                        state = 101;
+                    } else {
+                        lexeme.append((char) c);
+                        state = 2;
+                    }
+                    break;
+
+                case 3: // identificador ou palavra-chave
+                    if (Character.isLetter(c) || Character.isDigit(c) || c == '_') {
+                        lexeme.append((char) c);
+                        state = 3;
+                    } else {
+                        ungetc(c);
+                        String word = lexeme.toString();
+                        switch (word) {
+                            case "app": token.setType(TokenType.APP); break;
+                            case "int": token.setType(TokenType.INT); break;
+                            case "real": token.setType(TokenType.REAL); break;
+                            case "string": token.setType(TokenType.STRING); break;
+                            case "char": token.setType(TokenType.CHAR); break;
+                            case "if": token.setType(TokenType.IF); break;
+                            case "else": token.setType(TokenType.ELSE); break;
+                            case "while": token.setType(TokenType.WHILE); break;
+                            case "do": token.setType(TokenType.DO); break;
+                            case "scan": token.setType(TokenType.SCAN); break;
+                            case "print": token.setType(TokenType.PRINT); break;
+                            default: token.setType(TokenType.IDENTIFIER);
+                        }
+                        state = 101;
+                    }
+                    break;
+
+                case 4: // número inteiro ou float
+                    if (Character.isDigit(c)) {
+                        lexeme.append((char) c);
+                        state = 4;
+                    } else if (c == '.') {
+                        lexeme.append((char) c);
+                        state = 6; // número real
+                    } else {
+                        ungetc(c);
+                        token.setType(TokenType.NUMBER); // TODO: Especificar tipo inteiro
+                        state = 101;
+                    }
+                    break;
+
+                case 5: // operadores compostos (==, !=, >=, <=, &&, ||)
+                    if (c == '=' || c == '&' || c == '|') {
+                        lexeme.append((char) c);
+                    } else {
+                        ungetc(c);
+                    }
+
+                    String op = lexeme.toString();
+                    switch (op) {
+                        case "==": token.setType(TokenType.EQUALS); break;
+                        case "!=": token.setType(TokenType.NOT_EQUAL); break;
+                        case ">": token.setType(TokenType.GREATER); break;
+                        case ">=": token.setType(TokenType.GREATER_EQUAL); break;
+                        case "<": token.setType(TokenType.LESS); break;
+                        case "<=": token.setType(TokenType.LESS_EQUAL); break;
+                        case "&&": token.setType(TokenType.AND); break;
+                        case "||": token.setType(TokenType.OR); break;
+                        case "=": token.setType(TokenType.ASSIGN); break;
+                        default: token.setType(TokenType.ERROR);
+                    }
+                    state = 101;
+                    break;
+
+                case 6: // número real
+                    if (Character.isDigit(c)) {
+                        lexeme.append((char) c);
+                        state = 6;
+                    } else {
+                        ungetc(c);
+                        token.setType(TokenType.NUMBER); // TODO: Especificar tipo float
+                        state = 101;
+                    }
+                    break;
+
                 default:
-                    throw new Exception("Unreachable");
+                    throw new Exception("Unreachable state: " + state);
             }
         }
 
