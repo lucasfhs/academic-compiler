@@ -8,25 +8,23 @@ public class TokenFactory {
 
     public static Token createToken(TokenType type, String lexeme) {
         Value value = createValueForToken(type, lexeme);
-        return new Token(type, value);
+        return new Token(type, value, lexeme);
     }
 
     private static Value createValueForToken(TokenType type, String lexeme) {
         switch (type) {
-            case TokenType.NUMBER:
-                return new NumberValue(Integer.parseInt(lexeme));
-            case TokenType.STRING:
+            case INT_LITERAL:
+                return new IntValue(Integer.parseInt(lexeme));
+            case REAL_LITERAL:
+                return new RealValue(Float.parseFloat(lexeme));
+            case STR_LITERAL:
                 return new StringValue(lexeme);
-            case TokenType.TRUE:
-                return new BooleanValue(true);
-            case TokenType.FALSE:
-                return new BooleanValue(false);
-            case TokenType.IDENTIFIER:
+            case CHAR_LITERAL:
+                return new CharValue(lexeme.charAt(0));
+            case IDENTIFIER:
                 return new IdentifierValue(lexeme);
-            case TokenType.NULL:
-                return new NullValue();
             default:
-                return null;
+                return new NullValue();
         }
     }
 

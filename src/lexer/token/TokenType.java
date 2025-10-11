@@ -1,53 +1,56 @@
 package lexer.token;
 
 public enum TokenType {
-    APP(""),
-    IDENTIFIER("Identificador"),
+    // Constantes
+    IDENTIFIER("identifier"),
+    STR_LITERAL("string literal"),
+    INT_LITERAL("integer literal"),
+    REAL_LITERAL("real literal"),
+    CHAR_LITERAL("character literal"),
 
-    NUMBER("Número"),
-    TRUE("Valor Booleano Verdadeiro"),
-    FALSE("Valor Booleano Falso"),
-    ASSIGN("Operador de atribuição (=)"),
-    STRING("String"),
-    INT(""),
-    REAL(""),
-    CHAR(""),
+    // Palavras-chave
+    APP("application entry point"),
+    STRING("string type"),
+    INT("integer type"),
+    REAL("real number type"),
+    CHAR("character type"),
+    SCAN("input operation"),
+    PRINT("output operation"),
+    IF("conditional statement"),
+    ELSE("alternative branch"),
+    WHILE("while loop"),
+    DO("do-while loop"),
+    FOR("for loop"),
+    RETURN("returning from function"),
 
-    PLUS("Operador de adição (+)"),
-    MINUS("Operador de subtração (-)"),
-    MULTIPLY("Operador de multiplicação (*)"),
-    DIVIDE("Operador de divisão (/)"),
+    // Operadores
+    ASSIGN("assignment"),
+    PLUS("plus"),
+    MINUS("minus"),
+    MULTIPLY("multiply"),
+    DIVIDE("divide"),
+    EQUALS("equals"),
+    GREATER("greater"),
+    LESS("less"),
 
-    EQUALS("Operador de igualdade (==)"),
-    NOT_EQUAL(""),
-    GREATER(""),
-    GREATER_THAN(""),
-    GREATER_EQUAL(""),
-    LESS(""),
-    LESS_EQUAL(""),
+    // Operadores compostos
+    NOT_EQUAL("not equal"),
+    GREATER_EQUAL("greater or equal"),
+    LESS_EQUAL("less or equal"),
+    AND("logical and"),
+    OR("logical or"),
 
-    AND(""),
-    OR(""),  
+    // Pontuação
+    LPAREN("left parenthesis "),
+    RPAREN("right parenthesis"),
+    LBRACE("left brace"),
+    RBRACE("right brace"),
+    SEMICOLON("semicolon"),
+    COMMA("comma"),
 
-    SCAN(""),
-    PRINT(""),
-    IF("Palavra-chave 'if'"),
-    ELSE("Palavra-chave 'else'"),
-    WHILE("Palavra-chave 'while'"),
-    DO("Palavra-chave 'while'"),
-    FOR("Palavra-chave 'for'"),
-    RETURN("Palavra-chave 'return'"),
-
-    LPAREN("Parêntese esquerdo (()"),
-    RPAREN("Parêntese direito ())"),
-    LBRACE("Chave esquerda ({)"),
-    RBRACE("Chave direita (})"),
-    SEMICOLON("Ponto e vírgula (;)"),
-    COMMA("Vírgula (,)"),
-
-    NULL("Valor nulo."),
-    EOF("Fim de Arquivo"),
-    ERROR("Token de erro");
+    // Outros
+    EOF("end of file"),
+    ERROR("error occorrence");
 
     private final String description;
 
@@ -61,6 +64,15 @@ public enum TokenType {
 
     @Override
     public String toString() {
-        return name() + ": " + description;
+        return name() + ": " + this.description;
     }
+
+    public static TokenType fromDescription(String description) {
+    for (TokenType tt : TokenType.values()) {
+        if (tt.getDescription().equals(description)) {
+            return tt;
+        }
+    }
+    return null;
+}
 }

@@ -1,11 +1,48 @@
 package lexer;
 
 import java.io.*;
+import java.util.Map;
+
 import lexer.token.Token;
+import lexer.token.TokenFactory;
 import lexer.token.TokenType;
 import utils.LexerFileReader;
 
 public class Lexer implements AutoCloseable {
+
+    private static final Map<String, TokenType> KEYWORDS = Map.ofEntries(
+        Map.entry("app", TokenType.APP),
+        Map.entry("int", TokenType.INT),
+        Map.entry("real", TokenType.REAL),
+        Map.entry("string", TokenType.STRING),
+        Map.entry("char", TokenType.CHAR),
+        Map.entry("if", TokenType.IF),
+        Map.entry("else", TokenType.ELSE),
+        Map.entry("while", TokenType.WHILE),
+        Map.entry("do", TokenType.DO),
+        Map.entry("scan", TokenType.SCAN),
+        Map.entry("print", TokenType.PRINT),
+
+        Map.entry("==", TokenType.EQUALS),
+        Map.entry("!=", TokenType.NOT_EQUAL),
+        Map.entry(">=", TokenType.GREATER_EQUAL),
+        Map.entry("<=", TokenType.LESS_EQUAL),
+        Map.entry("&&", TokenType.AND),
+        Map.entry("||", TokenType.OR),
+        Map.entry("=", TokenType.ASSIGN),
+        Map.entry("+", TokenType.PLUS),
+        Map.entry("-", TokenType.MINUS),
+        Map.entry("*", TokenType.MULTIPLY),
+        Map.entry("/", TokenType.DIVIDE),
+        Map.entry(">", TokenType.GREATER),
+        Map.entry("<", TokenType.LESS),
+        Map.entry("(", TokenType.LPAREN),
+        Map.entry(")", TokenType.RPAREN),
+        Map.entry("{", TokenType.LBRACE),
+        Map.entry("}", TokenType.RBRACE),
+        Map.entry(";", TokenType.SEMICOLON),
+        Map.entry(",", TokenType.COMMA)
+    );
 
     private LexerFileReader reader;
 
@@ -50,49 +87,51 @@ public class Lexer implements AutoCloseable {
         // - BASE-
         SourcePosition startPosition = reader.getCurrentPosition();
         StringBuilder lexeme = new StringBuilder();
-        Token token = new Token(TokenType.EOF, null);
+        TokenType type = TokenType.EOF;
 
         int state = 1;
-        while (state != 14 && state != 15) {
+        while (state != 101 && state != 7) {
             int c = getc();
+            // System.out.printf("  [%02d, %03d ('%c')]\n", state, c, (char) c);
             // UTILIZACAO DO AFD
-
+            
             switch (state) {
                 case 1:
                     if (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
                         state = 1;
                     } else if (c == -1) {
-                        token.setType(TokenType.EOF);
+                        type = TokenType.EOF;
                         state = 101;
                     } else if (c == '"') {
                         state = 2; // literal string
                     } else if (c == '_' || Character.isLetter(c)) {
                         lexeme.append((char) c);
                         state = 3; // identificador ou palavra-chave
-                    } else if (Character.isDigit(c) || c == '-') {
+                    } else if (Character.isDigit(c)) {
                         lexeme.append((char) c);
                         state = 4; // número inteiro ou float
-                    } else if (c == '!' || c == '=' || c == '>' || c == '<' || c == '&' || c == '|') {
+                    } else if (c == '!' || c == '=' || c == '>' || c == '<' || 
+                               c == '&' || c == '|') {
                         lexeme.append((char) c);
-                        state = 5; // operadores compostos
-                    } else if (c == '+' || c == '*' || c == '/' ||
-                               c == '(' || c == ')' || c == '{' ||
-                               c == '}' || c == ',' || c == ';') {
+                        state = 5; // símbolos compostos
+                    } else if (c == '+' || c == '-' || c == '*' || c == '/' ||
+                               c == '{' || c == '(' || c == ')' || c == '}' ||
+                               c == ';' || c == ',') {
                         lexeme.append((char) c);
-                        state = 100; // delimitador simples
+                        state = 7; // simbolos simples
                     } else {
                         lexeme.append((char) c);
-                        token.setType(TokenType.ERROR);
+                        type = TokenType.ERROR;
                         state = 101;
                     }
                     break;
 
                 case 2: // literal string
                     if (c == '"') {
-                        token.setType(TokenType.STRING);
+                        type = TokenType.STR_LITERAL;
                         state = 101;
                     } else if (c == -1) {
-                        token.setType(TokenType.EOF);
+                        type = TokenType.ERROR;
                         state = 101;
                     } else {
                         lexeme.append((char) c);
@@ -106,21 +145,9 @@ public class Lexer implements AutoCloseable {
                         state = 3;
                     } else {
                         ungetc(c);
+
                         String word = lexeme.toString();
-                        switch (word) {
-                            case "app": token.setType(TokenType.APP); break;
-                            case "int": token.setType(TokenType.INT); break;
-                            case "real": token.setType(TokenType.REAL); break;
-                            case "string": token.setType(TokenType.STRING); break;
-                            case "char": token.setType(TokenType.CHAR); break;
-                            case "if": token.setType(TokenType.IF); break;
-                            case "else": token.setType(TokenType.ELSE); break;
-                            case "while": token.setType(TokenType.WHILE); break;
-                            case "do": token.setType(TokenType.DO); break;
-                            case "scan": token.setType(TokenType.SCAN); break;
-                            case "print": token.setType(TokenType.PRINT); break;
-                            default: token.setType(TokenType.IDENTIFIER);
-                        }
+                        type = KEYWORDS.getOrDefault(word, TokenType.IDENTIFIER);
                         state = 101;
                     }
                     break;
@@ -134,32 +161,18 @@ public class Lexer implements AutoCloseable {
                         state = 6; // número real
                     } else {
                         ungetc(c);
-                        token.setType(TokenType.NUMBER); // TODO: Especificar tipo inteiro
+                        type = TokenType.INT_LITERAL;
                         state = 101;
                     }
                     break;
 
-                case 5: // operadores compostos (==, !=, >=, <=, &&, ||)
-                    if (c == '=' || c == '&' || c == '|') {
+                case 5: // símbolos compostos (==, !=, >=, <=, &&, ||)
+                    if( c == '=' || c == '&' || c == '|') {
                         lexeme.append((char) c);
                     } else {
-                        ungetc(c);
+                        ungetc(c); // símbolo simples
                     }
-
-                    String op = lexeme.toString();
-                    switch (op) {
-                        case "==": token.setType(TokenType.EQUALS); break;
-                        case "!=": token.setType(TokenType.NOT_EQUAL); break;
-                        case ">": token.setType(TokenType.GREATER); break;
-                        case ">=": token.setType(TokenType.GREATER_EQUAL); break;
-                        case "<": token.setType(TokenType.LESS); break;
-                        case "<=": token.setType(TokenType.LESS_EQUAL); break;
-                        case "&&": token.setType(TokenType.AND); break;
-                        case "||": token.setType(TokenType.OR); break;
-                        case "=": token.setType(TokenType.ASSIGN); break;
-                        default: token.setType(TokenType.ERROR);
-                    }
-                    state = 101;
+                    state = 7;
                     break;
 
                 case 6: // número real
@@ -168,14 +181,17 @@ public class Lexer implements AutoCloseable {
                         state = 6;
                     } else {
                         ungetc(c);
-                        token.setType(TokenType.NUMBER); // TODO: Especificar tipo float
+                        type = TokenType.REAL_LITERAL;
                         state = 101;
                     }
                     break;
-
                 default:
                     throw new Exception("Unreachable state: " + state);
             }
+        }
+
+        if(state == 7) {
+            type = KEYWORDS.getOrDefault(lexeme.toString(), TokenType.ERROR);
         }
 
         // Define a posição do token
@@ -191,8 +207,7 @@ public class Lexer implements AutoCloseable {
         // endPosition.getAbsoluteEnd());
 
         // Retorna o Token...
-
-        return new Token(TokenType.ERROR, null);
+        return TokenFactory.createToken(type, lexeme.toString());
     }
 
     private int getc() throws Exception {

@@ -1,9 +1,9 @@
 package lexer.value;
 
-public class StringValue implements Value {
+public class LiteralValue implements Value {
     private final String value;
 
-    public StringValue(String value) {
+    public LiteralValue(String value) {
         this.value = value;
     }
 
@@ -13,7 +13,7 @@ public class StringValue implements Value {
 
     @Override
     public <T> T accept(ValueVisitor<T> visitor) {
-        return visitor.visitString(this);
+        return visitor.visitLiteral(this);
     }
 
     @Override
@@ -23,6 +23,6 @@ public class StringValue implements Value {
 
     @Override
     public String toString() {
-        return value.toString();
+        return "\"" + value + "\"";
     }
 }
