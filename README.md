@@ -10,7 +10,7 @@ Este projeto implementa um compilador simples em Java, organizado em módulos de
 ### 1. Compilar o código
 
 ```bash
-javac -d out src/*.java
+javac -d out src/**/*.java
 ```
 ````
 
