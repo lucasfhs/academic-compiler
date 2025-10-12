@@ -23,7 +23,15 @@ jar cfm MeuPrograma.jar MANIFEST.MF -C out .
 ### 3. Executar o programa
 
 ```bash
-java -jar MeuPrograma.jar
+java -jar MeuPrograma.jar <NomeArquivoDeEntrada>
+```
+
+Como entrada podem ser passados os arquivos presentes na pasta src/test
+
+Por exemplo
+
+ ```bash
+java -jar MeuPrograma.jar src/tests/test3.txt
 ```
 
 ---
