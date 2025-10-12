@@ -1,10 +1,7 @@
 import lexer.token.Token;
-import lexer.token.TokenFactory;
 import lexer.token.TokenType;
 
 import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import lexer.Lexer;
 
@@ -12,6 +9,9 @@ public class Main {
     public static void main(String[] args) {
         try {
             run(new FileInputStream(args[0]), true);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.err.println("Argumento inválido: é necessário o nome do arquivo de entrada.");
+            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -43,12 +43,4 @@ public class Main {
             e.printStackTrace();
         }
     }
-
-    private static List<String> splitIntoLines(String text, int width) {
-    List<String> lines = new ArrayList<>();
-    for (int i = 0; i < text.length(); i += width) {
-        lines.add(text.substring(i, Math.min(i + width, text.length())));
-    }
-    return lines;
-}
 }

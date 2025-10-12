@@ -1,21 +1,23 @@
 package utils;
 
+import lexer.SourcePosition;
+
 public class ErrorHandler {
     public static void reportError(String message) {
-        System.err.println("Error: " + message);
+        System.err.println("Erro: " + message);
     }
 
-    public static void reportError(String message, int line, int column) {
-        System.err.printf("Error at line %d, column %d: %s%n", line, column, message);
+    public static void reportError(String message, SourcePosition pos, String... args) {
+        System.err.printf("Erro na linha %d, coluna %d: %s%n\"%s\"", message, pos.getStartLine(), pos.getStartColumn(), String.join("\n", args));
     }
 
     public static void fatalError(String message) {
-        System.err.println("Fatal Error: " + message);
+        System.err.println("Erro Fatal: " + message);
         System.exit(1);
     }
 
-    public static void fatalError(String message, int line, int column) {
-        System.err.printf("Fatal Error at line %d, column %d: %s%n", line, column, message);
+    public static void fatalError(String message, SourcePosition pos, String... args) {
+        System.err.printf("Erro Fatal: %s na linha %d, coluna %d: %n\"%s\"", message, pos.getStartLine(), pos.getStartColumn(), String.join(", ", args));
         System.exit(1);
     }
 }

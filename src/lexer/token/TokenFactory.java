@@ -1,14 +1,15 @@
 package lexer.token;
 
+import lexer.SourcePosition;
 import lexer.value.*;
 
 public class TokenFactory {
     private TokenFactory() {
     }
 
-    public static Token createToken(TokenType type, String lexeme) {
+    public static Token createToken(TokenType type, String lexeme, SourcePosition position) {
         Value value = createValueForToken(type, lexeme);
-        return new Token(type, value, lexeme);
+        return new Token(type, value, lexeme, position);
     }
 
     private static Value createValueForToken(TokenType type, String lexeme) {

@@ -6,6 +6,7 @@ import java.util.Map;
 import lexer.token.Token;
 import lexer.token.TokenFactory;
 import lexer.token.TokenType;
+import utils.ErrorHandler;
 import utils.LexerFileReader;
 
 public class Lexer implements AutoCloseable {
@@ -87,6 +88,7 @@ public class Lexer implements AutoCloseable {
         // - BASE-
         SourcePosition startPosition = reader.getCurrentPosition();
         StringBuilder lexeme = new StringBuilder();
+        String errorMsg = "";
         TokenType type = TokenType.EOF;
 
         int state = 1;
@@ -132,6 +134,7 @@ public class Lexer implements AutoCloseable {
                         state = 101;
                     } else if (c == -1) {
                         type = TokenType.ERROR;
+                        errorMsg = "Literal String não terminada";
                         state = 101;
                     } else {
                         lexeme.append((char) c);
@@ -190,24 +193,30 @@ public class Lexer implements AutoCloseable {
             }
         }
 
-        if(state == 7) {
+        if (state == 7) {
             type = KEYWORDS.getOrDefault(lexeme.toString(), TokenType.ERROR);
         }
 
         // Define a posição do token
+        SourcePosition endPosition = reader.getCurrentPosition();
+        Token token = TokenFactory.createToken(type, lexeme.toString(),
+                new SourcePosition(
+                        reader.getFileName(),
+                        startPosition.getStartLine(),
+                        startPosition.getStartColumn(),
+                        endPosition.getEndLine(),
+                        endPosition.getEndColumn(),
+                        startPosition.getAbsoluteStart(),
+                        endPosition.getAbsoluteEnd()));
 
-        // SourcePosition endPosition = reader.getCurrentPosition();
-        // token.position = new SourcePosition(
-        // reader.getFileName(),
-        // startPosition.getStartLine(),
-        // startPosition.getStartColumn(),
-        // endPosition.getEndLine(),
-        // endPosition.getEndColumn(),
-        // startPosition.getAbsoluteStart(),
-        // endPosition.getAbsoluteEnd());
-
+        // Se for um token de erro, reporta o erro e termina a compilação
+        if (type == TokenType.ERROR) {
+            ErrorHandler.fatalError(
+                errorMsg, token.getPosition(), lexeme.toString()
+            );
+        }
         // Retorna o Token...
-        return TokenFactory.createToken(type, lexeme.toString());
+        return token;
     }
 
     private int getc() throws Exception {
