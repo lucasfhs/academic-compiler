@@ -22,27 +22,7 @@ public class Lexer implements AutoCloseable {
         Map.entry("while", TokenType.WHILE),
         Map.entry("do", TokenType.DO),
         Map.entry("scan", TokenType.SCAN),
-        Map.entry("print", TokenType.PRINT),
-
-        Map.entry("==", TokenType.EQUALS),
-        Map.entry("!=", TokenType.NOT_EQUAL),
-        Map.entry(">=", TokenType.GREATER_EQUAL),
-        Map.entry("<=", TokenType.LESS_EQUAL),
-        Map.entry("&&", TokenType.AND),
-        Map.entry("||", TokenType.OR),
-        Map.entry("=", TokenType.ASSIGN),
-        Map.entry("+", TokenType.PLUS),
-        Map.entry("-", TokenType.MINUS),
-        Map.entry("*", TokenType.MULTIPLY),
-        Map.entry("/", TokenType.DIVIDE),
-        Map.entry(">", TokenType.GREATER),
-        Map.entry("<", TokenType.LESS),
-        Map.entry("(", TokenType.LPAREN),
-        Map.entry(")", TokenType.RPAREN),
-        Map.entry("{", TokenType.LBRACE),
-        Map.entry("}", TokenType.RBRACE),
-        Map.entry(";", TokenType.SEMICOLON),
-        Map.entry(",", TokenType.COMMA)
+        Map.entry("print", TokenType.PRINT)
     );
 
     private LexerFileReader reader;
@@ -80,13 +60,8 @@ public class Lexer implements AutoCloseable {
         return this.reader.getCurrentLine();
     }
 
-    public SourcePosition getCurrentPosition() {
-        return reader.getCurrentPosition();
-    }
-
     public Token scan() throws Exception {
         // - BASE-
-        SourcePosition startPosition = reader.getCurrentPosition();
         StringBuilder lexeme = new StringBuilder();
         String errorMsg = "";
         TokenType type = TokenType.EOF;

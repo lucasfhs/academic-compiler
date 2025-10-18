@@ -20,8 +20,6 @@ public enum TokenType {
     ELSE("alternative branch"),
     WHILE("while loop"),
     DO("do-while loop"),
-    FOR("for loop"),
-    RETURN("returning from function"),
 
     // Operadores
     ASSIGN("assignment"),
@@ -49,6 +47,7 @@ public enum TokenType {
     COMMA("comma"),
 
     // Outros
+    PROGRAM_NAME("Name of file.")
     EOF("end of file"),
     ERROR("error occorrence");
 
