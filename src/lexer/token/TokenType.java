@@ -47,7 +47,7 @@ public enum TokenType {
     COMMA("comma"),
 
     // Outros
-    PROGRAM_NAME("Name of file.")
+    PROGRAM_NAME("Name of file."),
     EOF("end of file"),
     ERROR("error occorrence");
 
@@ -67,11 +67,11 @@ public enum TokenType {
     }
 
     public static TokenType fromDescription(String description) {
-    for (TokenType tt : TokenType.values()) {
-        if (tt.getDescription().equals(description)) {
-            return tt;
+        for (TokenType tt : TokenType.values()) {
+            if (tt.getDescription().equals(description)) {
+                return tt;
+            }
         }
+        return null;
     }
-    return null;
-}
 }
