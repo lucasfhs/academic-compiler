@@ -1,15 +1,14 @@
 package lexer.token;
 
-import lexer.SourcePosition;
 import lexer.value.*;
 
 public class TokenFactory {
     private TokenFactory() {
     }
 
-    public static Token createToken(TokenType type, String lexeme, SourcePosition position) {
+    public static Token createToken(TokenType type, String lexeme) {
         Value value = createValueForToken(type, lexeme);
-        return new Token(type, value, lexeme, position);
+        return new Token(type, value);
     }
 
     private static Value createValueForToken(TokenType type, String lexeme) {
@@ -19,7 +18,7 @@ public class TokenFactory {
             case REAL_LITERAL:
                 return new RealValue(Float.parseFloat(lexeme));
             case STR_LITERAL:
-                return new StringValue(lexeme);
+                return new LiteralValue(lexeme);
             case CHAR_LITERAL:
                 return new CharValue(lexeme.charAt(0));
             case IDENTIFIER:

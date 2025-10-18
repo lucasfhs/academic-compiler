@@ -1,20 +1,25 @@
 package lexer.value;
 
 public interface ValueVisitor<T> {
+
+    // IntegerConst
     T visitInt(IntValue value);
-    
-    T visitString(StringValue value);
-    
+
+    // RealConst
     T visitReal(RealValue value);
 
-    T visitLiteral(LiteralValue value);
-
-    T visitBoolean(BooleanValue value);
-
-    /* Provavelmente essa de Id vai rodar... */
-    T visitIdentifier(IdentifierValue value);
-    
+    // CharConst
     T visitChar(CharValue value);
 
+    // LiteralConst(String)
+    T visitLiteral(LiteralValue value);
+
+    // Bool
+    T visitBoolean(BooleanValue value);
+
+    // Null
     T visitNull(NullValue value);
+
+    // Id
+    T visitIdentifier(IdentifierValue value);
 }
