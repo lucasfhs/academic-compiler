@@ -84,18 +84,31 @@ public class Lexer implements AutoCloseable {
                 break;
             case '"':
                 // Testar... Implementação Sugerida pela IA...
+                lexeme.append((char) ch);
+                lexeme.append(readString());
                 next = getc();
-                if (Character.isDigit((char) next)) {
-                    lexeme.append(readNumber(next));
-                    type = lexeme.toString().contains(".") ? TokenType.REAL_LITERAL : TokenType.INT_LITERAL;
+                if ((char) next == '"') {
+                    type = TokenType.STR_LITERAL;
+                    lexeme.append(next);
                 } else {
-                    ungetc(next);
-                    lexeme.append('-');
-                    type = TokenType.MINUS;
+                    throw new Exception("Invalid token. Perhaps you lost to write '\"'.");
                 }
                 break;
             case '\'':
-                // Implementação a fazer...
+                // Testar... Implementação Sugerida pela IA...
+                lexeme.append((char) ch);
+                if (ch != -1 && ch != '\'' && ch != '\n' && ch != '\r') {
+                    lexeme.append((char) ch);
+                    next = getc();
+                    if ((char) next == '\'') {
+                        lexeme.append(next);
+                        type = TokenType.CHAR_LITERAL;
+                    } else {
+                        throw new Exception("Invalid token. Perhaps you lost to write '\''.");
+                    }
+                } else {
+                    throw new Exception("Invalid token.");
+                }
                 break;
             case '-':
                 // Testar... Implementação Sugerida pela IA...
@@ -172,6 +185,18 @@ public class Lexer implements AutoCloseable {
         }
 
         return TokenFactory.createToken(type, lexeme.toString());
+    }
+
+    private String readString() throws Exception {
+        StringBuilder sb = new StringBuilder();
+        int c = getc();
+
+        while (c != -1 && c != '"' && c != '\n' && c != '\r') {
+            sb.append((char) c);
+            c = getc();
+        }
+        ungetc(c);
+        return sb.toString();
     }
 
     private String readNumber(int firstChar) throws Exception {
