@@ -18,9 +18,11 @@ public class TokenFactory {
             case REAL_LITERAL:
                 return new RealValue(Float.parseFloat(lexeme));
             case STR_LITERAL:
-                return new LiteralValue(lexeme);
+            // A string is defined as "character*", so it’s the content inside ""
+                return new LiteralValue(lexeme.substring(1, lexeme.length() - 1));
             case CHAR_LITERAL:
-                return new CharValue(lexeme.charAt(0));
+            // A char is defined as 'character', so it’s the content inside ''
+                return new CharValue(lexeme.charAt(1));
             case IDENTIFIER:
                 return new IdentifierValue(lexeme);
             default:

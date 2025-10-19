@@ -23,6 +23,6 @@ public class CharValue implements Value {
 
     @Override
     public String toString() {
-        return String.valueOf(value);
+        return "'" + String.valueOf(value) + "'";
     }
 }

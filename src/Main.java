@@ -29,7 +29,6 @@ public class Main {
                 System.out.printf(
                     "%-2d | %-12s | %-12s | %-10s | %-12s%n",
                     lex.getLine(), 
-                    token.getLexeme(), 
                     token.getType().name(),
                     token.getValue(), 
                     token.getType().getDescription()

@@ -1,7 +1,6 @@
 package lexer;
 
 import java.io.*;
-import java.util.Map;
 
 import lexer.token.Token;
 import lexer.token.TokenFactory;
@@ -48,29 +47,92 @@ public class Lexer implements AutoCloseable {
     }
 
     public Token scan() throws Exception {
-        // - BASE-
-        StringBuilder lexeme = new StringBuilder();
         int ch = getc();
-        do {
+        StringBuilder lexeme = new StringBuilder();
+        TokenType type = TokenType.EOF;
+        int next;
+
+        for (;; getc()) {
             if (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\b')
-                continue; // ignora, apenas continua
+                continue;
             else if (ch == '\n')
-                line++; // conta linhas
-            else if (ch == -1)
-                break;
+                line++;
             else
                 break;
-            getc(); // lê o próximo caractere
-        } while (true);
-
-        TokenType type = TokenType.EOF;
-        switch ((char) ch) {
-            case '*':
-                break;
-
-            default:
-                break;
         }
+        switch ((char) ch) {
+            case ',':
+                type = TokenType.COMMA;
+                break;
+            case ';':
+                type = TokenType.SEMICOLON;
+                break;
+            case '{':
+                type = TokenType.OPEN_BRACE;
+                break;
+            case '}':
+                type = TokenType.CLOSE_BRACE;
+                break;
+            case '(':
+                type = TokenType.OPEN_PAREN;
+                break;
+            case ')':
+                type = TokenType.CLOSE_PAREN;
+                break;
+            case '*':
+                type = TokenType.MULTIPLY;
+                break;
+            case '/':
+                type = TokenType.DIVIDE;
+                break;
+            case '!':
+                next = getc();
+                if ((char) next == '=') {
+                    type = TokenType.NOT_EQUAL;
+                } else {
+                    ungetc(next);
+                    type = TokenType.NOT;
+                }
+                break;
+            case '=':
+                next = getc();
+                if ((char) next == '=') {
+                    type = TokenType.EQUAL;
+                } else {
+                    ungetc(next);
+                    type = TokenType.ASSIGN;
+                }
+                break;
+            case '>':
+                next = getc();
+                if ((char) next == '=') {
+                    type = TokenType.GREATER_EQUAL;
+                } else {
+                    ungetc(next);
+                    type = TokenType.GREATER;
+                }
+                break;
+            case '<':
+                next = getc();
+                if ((char) next == '=') {
+                    type = TokenType.LESS_EQUAL;
+                } else {
+                    ungetc(next);
+                    type = TokenType.LESS;
+                }
+                break;
+            case '|':
+                next = getc();
+                if ((char) next == '|') {
+                    type = TokenType.OR;
+                } else {
+                    throw new Exception("Invalid token. Perhaps you meant to write '|'.");
+                }
+                break;
+            default:
+                throw new Exception("Invalid token (Check syntax).");
+        }
+
         return TokenFactory.createToken(type, lexeme.toString());
     }
 
