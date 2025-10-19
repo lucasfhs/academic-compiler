@@ -19,25 +19,21 @@ public class Main {
 
     public static void run(FileInputStream inputStream, boolean flag) {
         try (Lexer lex = new Lexer(inputStream)) {
-        Token token;
-        System.out.println("---|--------------|--------------|------------|-------------");
-        System.out.println("Ln |    Lexema    |  TokenType   |   Valor    | Descrição   ");
-        System.out.println("---|--------------|--------------|------------|-------------");
+            Token token;
+            System.out.println("---|--------------|------------|-------------");
+            System.out.println("Ln |  TokenType   |   Valor    | Descrição   ");
+            System.out.println("---|--------------|------------|-------------");
             do {
                 token = lex.scan();
-                // Cabeçalho da tabela
                 System.out.printf(
-                    "%-2d | %-12s | %-12s | %-10s | %-12s%n",
-                    lex.getLine(), 
-                    token.getType().name(),
-                    token.getValue(), 
-                    token.getType().getDescription()
-                    );
-                    System.out.println("___|______________|______________|____________|_____________");
-                    // System.out.println("---|--------------|--------------|------------|-------------");
-                // System.out.println("-----------------------------------");
+                        "%-3d| %-12s | %-10s | %-12s%n",
+                        lex.getLine(),
+                        token.getType().name(),
+                        token.getValue(),
+                        token.getType().getDescription());
+                System.out.println("___|______________|____________|_____________");
             } while (token.getType() != TokenType.EOF &&
-                     token.getType() != TokenType.ERROR);
+                    token.getType() != TokenType.ERROR);
         } catch (Exception e) {
             e.printStackTrace();
         }
