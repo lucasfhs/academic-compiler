@@ -47,7 +47,7 @@ public class Lexer implements AutoCloseable {
     }
 
     public Token scan() throws Exception {
-        int ch = getc();
+        int ch;
         StringBuilder lexeme = new StringBuilder();
         TokenType type = TokenType.ERROR;
         int next;
@@ -207,7 +207,6 @@ public class Lexer implements AutoCloseable {
                 // Feito por IA conferir depois...
                 if (Character.isLetter((char) ch) || ch == '_') {
                     lexeme.append((char) ch);
-                    type = TokenType.IDENTIFIER;
 
                     // Continua lendo enquanto for letra, dígito ou _
                     while (true) {
@@ -219,6 +218,7 @@ public class Lexer implements AutoCloseable {
                             break;
                         }
                     }
+                    type = checkIfKeyword(lexeme.toString());
                     // installID(lexeme.toString());
                 } else {
                     throw new Exception("Invalid token (Check syntax).");
@@ -260,6 +260,35 @@ public class Lexer implements AutoCloseable {
         }
         ungetc(c);
         return sb.toString();
+    }
+
+    private TokenType checkIfKeyword(String lexeme) {
+        switch (lexeme) {
+            case "app":
+                return TokenType.APP;
+            case "string":
+                return TokenType.STRING;
+            case "int":
+                return TokenType.INT;
+            case "real":
+                return TokenType.REAL;
+            case "char":
+                return TokenType.CHAR;
+            case "scan":
+                return TokenType.SCAN;
+            case "print":
+                return TokenType.PRINT;
+            case "if":
+                return TokenType.IF;
+            case "else":
+                return TokenType.ELSE;
+            case "while":
+                return TokenType.WHILE;
+            case "do":
+                return TokenType.DO;
+            default:
+                return TokenType.IDENTIFIER;
+        }
     }
 
     private int getc() throws Exception {

@@ -9,7 +9,7 @@ public enum TokenType {
     CHAR_LITERAL("character literal"),
 
     // Palavras-chave
-    APP("application entry point"),
+    APP("application keyword"),
     STRING("string keyword"),
     INT("integer keyword"),
     REAL("real keyword"),
