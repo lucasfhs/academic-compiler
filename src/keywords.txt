@@ -1,0 +1,11 @@
+app
+else
+do
+while
+scan
+print
+if
+int
+real
+string
+char
