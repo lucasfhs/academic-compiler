@@ -111,7 +111,8 @@ public class Lexer implements AutoCloseable {
                 if ((char) next == '"') {
                     type = TokenType.STR_LITERAL;
                 } else {
-                    throw new Exception("Invalid token. Perhaps you lost to write '\"'.");
+                    ungetc(next);
+                    throw new Exception("Invalid token '\"" + lexeme.toString() + "' at line " + getLine());
                 }
                 break;
             case '\'':
@@ -123,10 +124,12 @@ public class Lexer implements AutoCloseable {
                     if ((char) next == '\'') {
                         type = TokenType.CHAR_LITERAL;
                     } else {
-                        throw new Exception("Invalid token. Perhaps you lost to write '\''.");
+                        ungetc(next);
+                        String nextCh = (next == -1) ? "END OF FILE" : Character.toString((char) next);
+                        throw new Exception("Invalid token '" + nextCh + "' at line " + getLine());
                     }
                 } else {
-                    throw new Exception("Invalid token.");
+                    throw new Exception("Invalid token '" + lexeme.toString() + "' at line " + getLine());
                 }
                 break;
             case '-':
@@ -188,8 +191,11 @@ public class Lexer implements AutoCloseable {
                 next = getc();
                 if ((char) next == '|') {
                     type = TokenType.OR;
+                    lexeme = null;
                 } else {
-                    throw new Exception("Invalid token. Perhaps you meant to write '|'.");
+                    ungetc(next);
+                    String nextCh = (next == -1) ? "END OF FILE" : Character.toString((char) next);
+                    throw new Exception("Invalid token '" + nextCh + "' at line " + getLine());
                 }
                 break;
             case '&':
@@ -197,7 +203,9 @@ public class Lexer implements AutoCloseable {
                 if ((char) next == '&') {
                     type = TokenType.AND;
                 } else {
-                    throw new Exception("Invalid token. Perhaps you meant to write '&'.");
+                    ungetc(next);
+                    String nextCh = (next == -1) ? "END OF FILE" : Character.toString((char) next);
+                    throw new Exception("Invalid token '" + nextCh + "' at line " + getLine());
                 }
                 break;
             default:
@@ -261,7 +269,7 @@ public class Lexer implements AutoCloseable {
                 ungetc(next);
             }
         }
-        
+
         return sb.toString();
     }
 
