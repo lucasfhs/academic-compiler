@@ -1,13 +1,17 @@
 import lexer.token.Token;
 import lexer.token.TokenType;
+import symboltable.Environment;
 
 import java.io.FileInputStream;
 
 import lexer.Lexer;
 
 public class Main {
+    public static String programName;
+
     public static void main(String[] args) {
         try {
+            programName = args[0].replaceAll(".*[/\\\\]([^/\\\\]+)\\.txt$", "$1");
             run(new FileInputStream(args[0]), true);
         } catch (ArrayIndexOutOfBoundsException e) {
             System.err.println("Argumento inválido: é necessário o nome do arquivo de entrada.");
@@ -17,8 +21,14 @@ public class Main {
         }
     }
 
+    public static String getProgramName() {
+        return Main.programName;
+    }
+
     public static void run(FileInputStream inputStream, boolean flag) {
-        try (Lexer lex = new Lexer(inputStream)) {
+        Environment symbolTable = new Environment();
+        symbolTable.installKeywords(programName);
+        try (Lexer lex = new Lexer(inputStream, symbolTable)) {
             Token token;
             System.out.println("---|--------------|------------|-------------");
             System.out.println("Ln |  TokenType   |   Valor    | Descrição   ");
@@ -34,6 +44,7 @@ public class Main {
                 System.out.println("___|______________|____________|_____________");
             } while (token.getType() != TokenType.EOF &&
                     token.getType() != TokenType.ERROR);
+            symbolTable.printSymbolTable();
         } catch (Exception e) {
             System.out.println("\n\n");
             System.out.println(e.getMessage());

@@ -5,20 +5,21 @@ import java.io.*;
 import lexer.token.Token;
 import lexer.token.TokenFactory;
 import lexer.token.TokenType;
+import symboltable.Environment;
 import utils.LexerFileReader;
 
 public class Lexer implements AutoCloseable {
 
     private LexerFileReader reader;
-
     private int line = 0;
+    private Environment symbolTable;
 
     public Lexer(String fileName) throws FileNotFoundException {
         this.reader = new LexerFileReader(fileName);
     }
 
-    public Lexer(InputStream is) throws IOException {
-
+    public Lexer(InputStream is, Environment symbolTable) throws IOException {
+        this.symbolTable = symbolTable;
         File tempFile = File.createTempFile("lexer_input", ".tmp");
         tempFile.deleteOnExit();
 
@@ -73,14 +74,14 @@ public class Lexer implements AutoCloseable {
                 }
             }
             if (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\b') {
-                continue; // ignora espaços
+                continue;
             }
 
             if (ch == '\n') {
                 line++;
-                continue; // mas lê o próximo!
+                continue;
             }
-            break; // encontrou caractere válido → sai do loop
+            break;
         }
         switch ((char) ch) {
             case ',':
@@ -105,7 +106,6 @@ public class Lexer implements AutoCloseable {
                 type = TokenType.PLUS;
                 break;
             case '"':
-                // Testar... Implementação Sugerida pela IA...
                 lexeme.append(readString());
                 next = getc();
                 if ((char) next == '"') {
@@ -117,7 +117,6 @@ public class Lexer implements AutoCloseable {
                 break;
             case '\'':
                 ch = getc();
-                // Testar... Implementação Sugerida pela IA...
                 if ((ch != -1 && ch != '\'' && ch != '\n' && ch != '\r')) {
                     lexeme.append((char) ch);
                     next = getc();
@@ -133,7 +132,6 @@ public class Lexer implements AutoCloseable {
                 }
                 break;
             case '-':
-                // Testar... Implementação Sugerida pela IA...
                 lexeme.append((char) ch);
                 next = getc();
                 if (Character.isDigit((char) next)) {
@@ -215,19 +213,18 @@ public class Lexer implements AutoCloseable {
                     type = lexeme.toString().contains(".") ? TokenType.REAL_LITERAL : TokenType.INT_LITERAL;
                 } else if (Character.isLetter((char) ch) || ch == '_') {
                     lexeme.append((char) ch);
-
-                    // Continua lendo enquanto for letra, dígito ou _
                     while (true) {
                         next = getc();
                         if (Character.isLetterOrDigit((char) next) || next == '_') {
                             lexeme.append((char) next);
                         } else {
-                            ungetc(next); // Devolve o caractere que não pertence ao identificador
+                            ungetc(next);
                             break;
                         }
                     }
                     type = checkIfKeyword(lexeme.toString());
-                    // installID(lexeme.toString());
+                    // Install ID
+                    symbolTable.installID(lexeme.toString(), TokenFactory.createToken(type, lexeme.toString()));
                 } else {
                     lexeme.append((char) ch);
                     throw new Exception("Invalid token '" + lexeme.toString() + "' at line " + getLine());

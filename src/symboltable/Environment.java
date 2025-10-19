@@ -49,11 +49,32 @@ public class Environment {
         return null;
     }
 
-    public void set(String id, Token token) {
+    public void installID(String id, Token token) {
         if (this.memory.containsKey(id)) {
             throw new RuntimeException("Erro: identificador '" + id + "' já declarado neste escopo.");
         }
         this.memory.put(id, token);
+    }
+
+    public void printSymbolTable() {
+        System.out.println("=== TABELA DE SÍMBOLOS ===");
+
+        Environment env = this;
+        // int escopo = 0;
+
+        while (env != null) {
+            // System.out.println("Escopo " + escopo + ":");
+
+            for (String id : env.memory.keySet()) {
+                Token token = env.memory.get(id);
+                System.out.println("  " + id + " -> " + token.getType());
+            }
+
+            env = env.prev;
+            // escopo++;
+        }
+
+        System.out.println("==========================");
     }
 
 }
