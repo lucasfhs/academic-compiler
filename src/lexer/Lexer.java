@@ -59,6 +59,19 @@ public class Lexer implements AutoCloseable {
                 return TokenFactory.createToken(TokenType.EOF, "");
             }
 
+            if (ch == '/') {
+                next = getc();
+                if (next == '/') {
+                    while ((ch = getc()) != -1 && ch != '\n') {
+                    }
+                    if (ch == '\n')
+                        line++;
+                    continue;
+                } else {
+                    ungetc(next);
+                    break;
+                }
+            }
             if (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\b') {
                 continue; // ignora espaços
             }
@@ -67,7 +80,6 @@ public class Lexer implements AutoCloseable {
                 line++;
                 continue; // mas lê o próximo!
             }
-
             break; // encontrou caractere válido → sai do loop
         }
         switch ((char) ch) {
