@@ -49,16 +49,26 @@ public class Lexer implements AutoCloseable {
     public Token scan() throws Exception {
         int ch = getc();
         StringBuilder lexeme = new StringBuilder();
-        TokenType type = TokenType.EOF;
+        TokenType type = TokenType.ERROR;
         int next;
 
-        for (;; getc()) {
-            if (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\b')
-                continue;
-            else if (ch == '\n')
+        while (true) {
+            ch = getc();
+
+            if (ch == -1) {
+                return TokenFactory.createToken(TokenType.EOF, "");
+            }
+
+            if (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\b') {
+                continue; // ignora espaços
+            }
+
+            if (ch == '\n') {
                 line++;
-            else
-                break;
+                continue; // mas lê o próximo!
+            }
+
+            break; // encontrou caractere válido → sai do loop
         }
         switch ((char) ch) {
             case ',':
@@ -112,6 +122,7 @@ public class Lexer implements AutoCloseable {
                 break;
             case '-':
                 // Testar... Implementação Sugerida pela IA...
+                lexeme.append((char) ch);
                 next = getc();
                 if (Character.isDigit((char) next)) {
                     lexeme.append(readNumber(next));
