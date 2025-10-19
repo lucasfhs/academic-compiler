@@ -181,7 +181,25 @@ public class Lexer implements AutoCloseable {
                 }
                 break;
             default:
-                throw new Exception("Invalid token (Check syntax).");
+                // Feito por IA conferir depois...
+                if (Character.isLetter((char) ch) || ch == '_') {
+                    lexeme.append((char) ch);
+                    type = TokenType.IDENTIFIER;
+
+                    // Continua lendo enquanto for letra, dígito ou _
+                    while (true) {
+                        next = getc();
+                        if (Character.isLetterOrDigit((char) next) || next == '_') {
+                            lexeme.append((char) next);
+                        } else {
+                            ungetc(next); // Devolve o caractere que não pertence ao identificador
+                            break;
+                        }
+                    }
+                    // installID(lexeme.toString());
+                } else {
+                    throw new Exception("Invalid token (Check syntax).");
+                }
         }
 
         return TokenFactory.createToken(type, lexeme.toString());
