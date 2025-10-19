@@ -79,6 +79,36 @@ public class Lexer implements AutoCloseable {
             case ')':
                 type = TokenType.CLOSE_PAREN;
                 break;
+            case '+':
+                type = TokenType.PLUS;
+                break;
+            case '"':
+                // Testar... Implementação Sugerida pela IA...
+                next = getc();
+                if (Character.isDigit((char) next)) {
+                    lexeme.append(readNumber(next));
+                    type = lexeme.toString().contains(".") ? TokenType.REAL_LITERAL : TokenType.INT_LITERAL;
+                } else {
+                    ungetc(next);
+                    lexeme.append('-');
+                    type = TokenType.MINUS;
+                }
+                break;
+            case '\'':
+                // Implementação a fazer...
+                break;
+            case '-':
+                // Testar... Implementação Sugerida pela IA...
+                next = getc();
+                if (Character.isDigit((char) next)) {
+                    lexeme.append(readNumber(next));
+                    type = lexeme.toString().contains(".") ? TokenType.REAL_LITERAL : TokenType.INT_LITERAL;
+                } else {
+                    ungetc(next);
+                    lexeme.append('-');
+                    type = TokenType.MINUS;
+                }
+                break;
             case '*':
                 type = TokenType.MULTIPLY;
                 break;
@@ -129,11 +159,41 @@ public class Lexer implements AutoCloseable {
                     throw new Exception("Invalid token. Perhaps you meant to write '|'.");
                 }
                 break;
+            case '&':
+                next = getc();
+                if ((char) next == '&') {
+                    type = TokenType.AND;
+                } else {
+                    throw new Exception("Invalid token. Perhaps you meant to write '&'.");
+                }
+                break;
             default:
                 throw new Exception("Invalid token (Check syntax).");
         }
 
         return TokenFactory.createToken(type, lexeme.toString());
+    }
+
+    private String readNumber(int firstChar) throws Exception {
+        StringBuilder sb = new StringBuilder();
+        sb.append((char) firstChar);
+        int c;
+        while (Character.isDigit((char) (c = getc()))) {
+            sb.append((char) c);
+        }
+        if ((char) c == '.') {
+            int next = getc();
+            if (Character.isDigit((char) next)) {
+                sb.append('.').append((char) next);
+                while (Character.isDigit((char) (next = getc()))) {
+                    sb.append((char) next);
+                }
+            } else {
+                ungetc(next);
+            }
+        }
+        ungetc(c);
+        return sb.toString();
     }
 
     private int getc() throws Exception {
