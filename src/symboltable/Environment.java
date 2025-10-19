@@ -50,9 +50,11 @@ public class Environment {
     }
 
     public void installID(String id, Token token) {
-        if (this.memory.containsKey(id)) {
-            throw new RuntimeException("Erro: identificador '" + id + "' já declarado neste escopo.");
-        }
+        // Como ainda não há analisador sintatico não é possível saber sobre escopo logo essa parte está comentada.
+        // if (this.memory.containsKey(id)) {
+        // throw new RuntimeException("Erro: identificador '" + id + "' já declarado
+        // neste escopo.");
+        // }
         this.memory.put(id, token);
     }
 
