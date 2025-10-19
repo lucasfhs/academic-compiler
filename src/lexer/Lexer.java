@@ -106,24 +106,21 @@ public class Lexer implements AutoCloseable {
                 break;
             case '"':
                 // Testar... Implementação Sugerida pela IA...
-                lexeme.append((char) ch);
                 lexeme.append(readString());
                 next = getc();
                 if ((char) next == '"') {
                     type = TokenType.STR_LITERAL;
-                    lexeme.append(next);
                 } else {
                     throw new Exception("Invalid token. Perhaps you lost to write '\"'.");
                 }
                 break;
             case '\'':
+                ch = getc();
                 // Testar... Implementação Sugerida pela IA...
-                lexeme.append((char) ch);
-                if (ch != -1 && ch != '\'' && ch != '\n' && ch != '\r') {
+                if ((ch != -1 && ch != '\'' && ch != '\n' && ch != '\r')) {
                     lexeme.append((char) ch);
                     next = getc();
                     if ((char) next == '\'') {
-                        lexeme.append(next);
                         type = TokenType.CHAR_LITERAL;
                     } else {
                         throw new Exception("Invalid token. Perhaps you lost to write '\''.");
@@ -238,6 +235,7 @@ public class Lexer implements AutoCloseable {
             c = getc();
         }
         ungetc(c);
+
         return sb.toString();
     }
 
