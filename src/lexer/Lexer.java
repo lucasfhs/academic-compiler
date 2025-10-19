@@ -201,8 +201,11 @@ public class Lexer implements AutoCloseable {
                 }
                 break;
             default:
-                // Feito por IA conferir depois...
-                if (Character.isLetter((char) ch) || ch == '_') {
+                if (Character.isDigit((char) ch)) {
+                    lexeme.append((char) ch);
+                    lexeme.append(readNumberWithoutFirstChar());
+                    type = lexeme.toString().contains(".") ? TokenType.REAL_LITERAL : TokenType.INT_LITERAL;
+                } else if (Character.isLetter((char) ch) || ch == '_') {
                     lexeme.append((char) ch);
 
                     // Continua lendo enquanto for letra, dígito ou _
@@ -258,6 +261,29 @@ public class Lexer implements AutoCloseable {
             }
         }
         ungetc(c);
+        return sb.toString();
+    }
+
+    private String readNumberWithoutFirstChar() throws Exception {
+        StringBuilder sb = new StringBuilder();
+        int c;
+        while (Character.isDigit((char) (c = getc()))) {
+            sb.append((char) c);
+        }
+        if ((char) c == '.') {
+            int next = getc();
+            if (Character.isDigit((char) next)) {
+                sb.append('.').append((char) next);
+                while (Character.isDigit((char) (next = getc()))) {
+                    sb.append((char) next);
+                }
+                ungetc(next);
+            } else {
+                ungetc(next);
+            }
+        } else {
+            ungetc(c);
+        }
         return sb.toString();
     }
 
