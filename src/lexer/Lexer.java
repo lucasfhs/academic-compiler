@@ -189,7 +189,6 @@ public class Lexer implements AutoCloseable {
                 next = getc();
                 if ((char) next == '|') {
                     type = TokenType.OR;
-                    lexeme = null;
                 } else {
                     ungetc(next);
                     String nextCh = (next == -1) ? "END OF FILE" : Character.toString((char) next);

@@ -5,13 +5,13 @@ app geometria
 { print("Entre com o raio:");
     scand(raio);
 
-    if (raio > 0){
-    Area = 3. * raio * radio;
-    volume = (4 * 3.14 * raio * raio * raio / 3;
-    print("Area: ");
-    print (area);
-    print ("Volume);
-    print (volume);
+    if (raio > 0){    
+        Area = 3. * raio * radio;
+        volume = (4 * 3.14 * raio * raio * raio / 3;
+        print("Area: ");
+        print (area);
+        print ("Volume");
+        print (volume);
 };
     geometria = -volume;
     print ( !(volume > 0 && area > 0 || raio == 0));
