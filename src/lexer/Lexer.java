@@ -256,11 +256,12 @@ public class Lexer implements AutoCloseable {
                 while (Character.isDigit((char) (next = getc()))) {
                     sb.append((char) next);
                 }
+                ungetc(next);
             } else {
                 ungetc(next);
             }
         }
-        ungetc(c);
+        
         return sb.toString();
     }
 
