@@ -35,7 +35,9 @@ public class Main {
             } while (token.getType() != TokenType.EOF &&
                     token.getType() != TokenType.ERROR);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("\n\n");
+            System.out.println(e.getMessage());
+            System.out.println("Please review the syntax. Ending program now.");
         }
     }
 }

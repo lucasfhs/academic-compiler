@@ -221,7 +221,8 @@ public class Lexer implements AutoCloseable {
                     type = checkIfKeyword(lexeme.toString());
                     // installID(lexeme.toString());
                 } else {
-                    throw new Exception("Invalid token (Check syntax).");
+                    lexeme.append((char) ch);
+                    throw new Exception("Invalid token '" + lexeme.toString() + "' at line " + getLine());
                 }
         }
 
