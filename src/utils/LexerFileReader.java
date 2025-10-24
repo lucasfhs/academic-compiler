@@ -2,8 +2,6 @@ package utils;
 
 import java.io.*;
 
-import lexer.SourcePosition;
-
 public class LexerFileReader implements AutoCloseable {
     private final RandomAccessFile file;
     private final String fileName;
@@ -59,28 +57,6 @@ public class LexerFileReader implements AutoCloseable {
 
             endOfFile = false;
         }
-    }
-
-    public SourcePosition getCurrentPosition() {
-        return new SourcePosition(
-                fileName,
-                currentLine,
-                currentColumn,
-                currentLine,
-                currentColumn,
-                (int) currentPosition,
-                (int) currentPosition + 1);
-    }
-
-    public SourcePosition getPositionRange(int startAbs, int endAbs) {
-        return new SourcePosition(
-                fileName,
-                currentLine,
-                currentColumn,
-                currentLine,
-                currentColumn + (endAbs - startAbs),
-                startAbs,
-                endAbs);
     }
 
     public boolean isEndOfFile() {

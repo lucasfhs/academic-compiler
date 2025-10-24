@@ -1,31 +1,55 @@
 package lexer.token;
 
 public enum TokenType {
-    IDENTIFIER("Identificador"),
-    NUMBER("Número"),
-    TRUE("Valor Booleano Verdadeiro"),
-    FALSE("Valor Booleano Falso"),
-    STRING("String"),
-    PLUS("Operador de adição (+)"),
-    MINUS("Operador de subtração (-)"),
-    MULTIPLY("Operador de multiplicação (*)"),
-    DIVIDE("Operador de divisão (/)"),
-    ASSIGN("Operador de atribuição (=)"),
-    EQUALS("Operador de igualdade (==)"),
-    IF("Palavra-chave 'if'"),
-    ELSE("Palavra-chave 'else'"),
-    WHILE("Palavra-chave 'while'"),
-    FOR("Palavra-chave 'for'"),
-    RETURN("Palavra-chave 'return'"),
-    LPAREN("Parêntese esquerdo (()"),
-    RPAREN("Parêntese direito ())"),
-    LBRACE("Chave esquerda ({)"),
-    RBRACE("Chave direita (})"),
-    SEMICOLON("Ponto e vírgula (;)"),
-    COMMA("Vírgula (,)"),
-    NULL("Valor nulo."),
-    EOF("Fim de Arquivo"),
-    ERROR("Token de erro");
+    // Constantes
+    IDENTIFIER("identifier"),
+    STR_LITERAL("string literal"),
+    INT_LITERAL("integer literal"),
+    REAL_LITERAL("real literal"),
+    CHAR_LITERAL("character literal"),
+
+    // Palavras-chave
+    APP("application keyword"),
+    STRING("string keyword"),
+    INT("integer keyword"),
+    REAL("real keyword"),
+    CHAR("character keyword"),
+    SCAN("input operation keyword"),
+    PRINT("output operation keyword"),
+    IF("conditional statement keyword"),
+    ELSE("alternative branch keyword"),
+    WHILE("while loop keyword"),
+    DO("do-while loop keyword"),
+
+    // Operadores
+    ASSIGN("assignment relop"),
+    PLUS("plus add op"),
+    MINUS("minus add op"),
+    MULTIPLY("multiply mulop"),
+    DIVIDE("divide mulop"),
+    EQUAL("equals relop"),
+    GREATER("greater relop"),
+    LESS("less relop"),
+    NOT("Exclamation symbol"),
+    // Operadores compostos
+    NOT_EQUAL("not equal relop"),
+    GREATER_EQUAL("greater or equal relop"),
+    LESS_EQUAL("less or equal relop"),
+    AND("logical and mulop"),
+    OR("logical or addop"),
+
+    // Pontuação
+    OPEN_PAREN("left parenthesis "),
+    CLOSE_PAREN("right parenthesis"),
+    OPEN_BRACE("left brace"),
+    CLOSE_BRACE("right brace"),
+    SEMICOLON("semicolon"),
+    COMMA("comma"),
+
+    // Outros
+    PROGRAM_NAME("Name of file."),
+    EOF("end of file"),
+    ERROR("error occorrence");
 
     private final String description;
 
@@ -39,6 +63,15 @@ public enum TokenType {
 
     @Override
     public String toString() {
-        return name() + ": " + description;
+        return name() + ": " + this.description;
+    }
+
+    public static TokenType fromDescription(String description) {
+        for (TokenType tt : TokenType.values()) {
+            if (tt.getDescription().equals(description)) {
+                return tt;
+            }
+        }
+        return null;
     }
 }

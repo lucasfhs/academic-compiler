@@ -18,7 +18,7 @@ public class IdentifierValue implements Value {
     
     @Override
     public boolean eval() {
-        return true; // Identificadores sempre avaliam como true
+        return true;
     }
     
     @Override

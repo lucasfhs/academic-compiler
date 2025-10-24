@@ -13,20 +13,19 @@ public class TokenFactory {
 
     private static Value createValueForToken(TokenType type, String lexeme) {
         switch (type) {
-            case TokenType.NUMBER:
-                return new NumberValue(Integer.parseInt(lexeme));
-            case TokenType.STRING:
-                return new StringValue(lexeme);
-            case TokenType.TRUE:
-                return new BooleanValue(true);
-            case TokenType.FALSE:
-                return new BooleanValue(false);
-            case TokenType.IDENTIFIER:
+            case INT_LITERAL:
+                return new IntValue(Integer.parseInt(lexeme));
+            case REAL_LITERAL:
+                return new RealValue(Float.parseFloat(lexeme));
+            case STR_LITERAL:
+                return new LiteralValue(lexeme);
+            case CHAR_LITERAL:
+                // A char is defined as 'character', so it’s the content inside ''
+                return new CharValue(lexeme.charAt(0));
+            case IDENTIFIER:
                 return new IdentifierValue(lexeme);
-            case TokenType.NULL:
-                return new NullValue();
             default:
-                return null;
+                return new NullValue();
         }
     }
 

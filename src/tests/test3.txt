@@ -1,0 +1,24 @@
+app idade
+/Um programa para calcular o maior valor
+    int a, b, c, maior = 0;
+{
+    scan(a);
+    scan(b);
+    scan(c);
+
+    if ( a>b && a>c
+        maior = a;
+    ){
+    else {
+        if (b>c) {
+            maior = b;
+        }
+        else{
+            maior = c;
+        }
+    }
+    write("Maior: " );
+    write(maior);
+
+    
+}
