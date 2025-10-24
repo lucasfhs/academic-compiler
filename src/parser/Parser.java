@@ -56,9 +56,117 @@ public class Parser {
 
     // Regra inicial da gramatica...
 
-    public void process() throws Exception {
-        // Alguma regra...
+    public void procProcess() throws Exception {
+        procProgram();
         eat(TokenType.EOF);
     }
 
+    public void procProgram() throws Exception {
+        eat(TokenType.APP);
+        procBody();
+    }
+
+    public void procBody() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procDeclList() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procDecl() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procIdentList() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procType() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procStmtList() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procStmt() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procAssignStmt() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procIfStmt() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procDoWhileStmt() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procWhileStmt() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procReadStmt() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procWriteStmt() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procExpression() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procSimpleExpr() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procTerm() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procFactorA() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procFactor() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procRelop() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procAddOp() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procMulOp() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procConstant() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procIntegerConst() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procRealConst() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procCharonst() throws Exception {
+        // Implementação em andamento...
+    }
+
+    public void procLiteral() throws Exception {
+        // Implementação em andamento...
+    }
 }
