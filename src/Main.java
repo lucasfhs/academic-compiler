@@ -44,7 +44,7 @@ public class Main {
             // token.getType() != TokenType.ERROR);
             // symbolTable.printSymbolTable();
             Parser parser = new Parser(lex);
-            parser.process();
+            parser.procProcess();
         } catch (Exception e) {
             System.out.println("\n\n");
             System.out.println(e.getMessage());
