@@ -1,5 +1,4 @@
-import lexer.token.Token;
-import lexer.token.TokenType;
+import parser.Parser;
 import symboltable.Environment;
 
 import java.io.FileInputStream;
@@ -29,22 +28,23 @@ public class Main {
         Environment symbolTable = new Environment();
         symbolTable.installKeywords(programName);
         try (Lexer lex = new Lexer(inputStream, symbolTable)) {
-            Token token;
-            System.out.println("---|--------------|------------|-------------");
-            System.out.println("Ln |  TokenType   |   Valor    | Descrição   ");
-            System.out.println("---|--------------|------------|-------------");
-            do {
-                token = lex.scan();
-                System.out.printf(
-                        "%-3d| %-12s | %-10s | %-12s%n",
-                        lex.getLine(),
-                        token.getType().name(),
-                        token.getValue(),
-                        token.getType().getDescription());
-                System.out.println("___|______________|____________|_____________");
-            } while (token.getType() != TokenType.EOF &&
-                    token.getType() != TokenType.ERROR);
-            symbolTable.printSymbolTable();
+            // System.out.println("---|--------------|------------|-------------");
+            // System.out.println("Ln | TokenType | Valor | Descrição ");
+            // System.out.println("---|--------------|------------|-------------");
+            // do {
+            // token = lex.scan();
+            // System.out.printf(
+            // "%-3d| %-12s | %-10s | %-12s%n",
+            // lex.getLine(),
+            // token.getType().name(),
+            // token.getValue(),
+            // token.getType().getDescription());
+            // System.out.println("___|______________|____________|_____________");
+            // } while (token.getType() != TokenType.EOF &&
+            // token.getType() != TokenType.ERROR);
+            // symbolTable.printSymbolTable();
+            Parser parser = new Parser(lex);
+            parser.process();
         } catch (Exception e) {
             System.out.println("\n\n");
             System.out.println(e.getMessage());
