@@ -153,9 +153,39 @@ public class Parser {
         // ";"
         eat(TokenType.SEMICOLON);
     }
-
+    // if-stmt ::= if "(" expression ")" "{" stmt-list "}" if-stmtZ
     public void procIfStmt() throws Exception {
-        // Implementação em andamento...
+        // if
+        eat(TokenType.IF);
+        // "("
+        eat(TokenType.OPEN_PAREN);
+        // expression
+        procExpression();
+        // ")"
+        eat(TokenType.CLOSE_PAREN);
+        // "{"
+        eat(TokenType.OPEN_BRACE);
+        // stmt-list
+        procStmtList();
+        // "}"
+        eat(TokenType.CLOSE_BRACE);
+        // if-stmtZ
+        procIfStmtZ();
+    }
+    // if-stmtZ ::= lambda | else "{" stmt-list "}"
+    public void procIfStmtZ() throws Exception {
+        // else "{" stmt-list "}"
+        if(check(TokenType.ELSE)){
+            // else
+            eat(TokenType.ELSE);
+            // "{"
+            eat(TokenType.OPEN_BRACE);
+            // stmt-list
+            procStmtList();
+            // "}"
+            eat(TokenType.CLOSE_BRACE);
+        }
+        // lambda
     }
 
     public void procDoWhileStmt() throws Exception {
