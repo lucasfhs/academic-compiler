@@ -142,9 +142,16 @@ public class Parser {
             // Recuperacao de erro...
         }
     }
-
+    // assign-stmt ::= identifier "=" simple_expr ";"
     public void procAssignStmt() throws Exception {
-        // Implementação em andamento...
+        // identifier
+        eat(TokenType.IDENTIFIER);
+        // "="
+        eat(TokenType.ASSIGN);
+        // simple_expr
+        procSimpleExpr();
+        // ";"
+        eat(TokenType.SEMICOLON);
     }
 
     public void procIfStmt() throws Exception {
