@@ -54,20 +54,30 @@ public class Parser {
         }
     }
 
-    // Regra inicial da gramatica...
-
+    // process :: program EOF
     public void procProcess() throws Exception {
         procProgram();
         eat(TokenType.EOF);
     }
 
+    // program ::= app body
     public void procProgram() throws Exception {
         eat(TokenType.APP);
         procBody();
     }
 
+    // body ::= [decl-list] "{" stmt-list "}"
     public void procBody() throws Exception {
-        // Implementação em andamento...
+        // [decl-list]
+        if (check(TokenType.INT, TokenType.REAL, TokenType.CHAR)) {
+            procDeclList();
+        }
+        // "{"
+        eat(TokenType.OPEN_BRACE);
+        // stmt-list
+        procStmtList();
+        // "}"
+        eat(TokenType.CLOSE_BRACE);
     }
 
     public void procDeclList() throws Exception {
