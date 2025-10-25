@@ -54,24 +54,44 @@ public class Parser {
         }
     }
 
-    // Regra inicial da gramatica...
-
+    // process :: program "EOF"
     public void procProcess() throws Exception {
+        // program
         procProgram();
+        // "EOF"
         eat(TokenType.EOF);
     }
 
+    // program ::= app body
     public void procProgram() throws Exception {
+        // "app"
         eat(TokenType.APP);
+        // body
         procBody();
     }
 
+    // body ::= [decl-list] "{" stmt-list "}"
     public void procBody() throws Exception {
-        // Implementação em andamento...
+        // [decl-list]
+        if (check(TokenType.INT, TokenType.REAL, TokenType.CHAR, TokenType.STRING)) {
+            procDeclList();
+        }
+        // "{"
+        eat(TokenType.OPEN_BRACE);
+        // stmt-list
+        procStmtList();
+        // "}"
+        eat(TokenType.CLOSE_BRACE);
     }
 
+    // decl-list ::= decl {decl}
     public void procDeclList() throws Exception {
-        // Implementação em andamento...
+        // decl
+        procDecl();
+        // {decl}
+        while (check(TokenType.INT, TokenType.REAL, TokenType.CHAR, TokenType.STRING)) {
+            procDecl();
+        }
     }
 
     public void procDecl() throws Exception {
@@ -86,36 +106,160 @@ public class Parser {
         // Implementação em andamento...
     }
 
+    // stmt-list ::= stmt {stmt}
     public void procStmtList() throws Exception {
-        // Implementação em andamento...
+        // stmt
+        procStmt();
+        // {stmt}
+        while (check(TokenType.IDENTIFIER, TokenType.IF, TokenType.DO, TokenType.WHILE,
+                TokenType.SCAN, TokenType.PRINT)) {
+            procStmt();
+        }
     }
 
+    // stmt ::= assign-stmt | if-stmt | while-stmt | dowhile-stmt | read-stmt |
+    // write-stmt
     public void procStmt() throws Exception {
-        // Implementação em andamento...
+        // assign-stmt | if-stmt | while-stmt | dowhile-stmt | read-stmt | write-stmt
+        if (check(TokenType.IDENTIFIER)) {
+            // assign-stmt
+            procAssignStmt();
+        } else if (check(TokenType.IF)) {
+            // if-stmt
+            procIfStmt();
+        } else if (check(TokenType.WHILE)) {
+            // while-stmt
+            procWhileStmt();
+        } else if (check(TokenType.DO)) {
+            // dowhile-stmt
+            procDoWhileStmt();
+        } else if (check(TokenType.SCAN)) {
+            // read-stmt
+            procReadStmt();
+        } else if (check(TokenType.PRINT)) {
+            // write-stmt
+            procWriteStmt();
+        } else {
+            // Recuperacao de erro...
+        }
     }
 
+    // assign-stmt ::= identifier "=" simple_expr ";"
     public void procAssignStmt() throws Exception {
-        // Implementação em andamento...
+        // identifier
+        eat(TokenType.IDENTIFIER);
+        // "="
+        eat(TokenType.ASSIGN);
+        // simple_expr
+        procSimpleExpr();
+        // ";"
+        eat(TokenType.SEMICOLON);
     }
 
+    // if-stmt ::= if "(" expression ")" "{" stmt-list "}" if-stmtZ
     public void procIfStmt() throws Exception {
-        // Implementação em andamento...
+        // if
+        eat(TokenType.IF);
+        // "("
+        eat(TokenType.OPEN_PAREN);
+        // expression
+        procExpression();
+        // ")"
+        eat(TokenType.CLOSE_PAREN);
+        // "{"
+        eat(TokenType.OPEN_BRACE);
+        // stmt-list
+        procStmtList();
+        // "}"
+        eat(TokenType.CLOSE_BRACE);
+        // if-stmtZ
+        procIfStmtZ();
     }
 
+    // if-stmtZ ::= lambda | else "{" stmt-list "}"
+    public void procIfStmtZ() throws Exception {
+        // else "{" stmt-list "}"
+        if (check(TokenType.ELSE)) {
+            // else
+            eat(TokenType.ELSE);
+            // "{"
+            eat(TokenType.OPEN_BRACE);
+            // stmt-list
+            procStmtList();
+            // "}"
+            eat(TokenType.CLOSE_BRACE);
+        }
+        // lambda
+    }
+
+    // dowhile-stmt ::= do "{" stmt-list "}" while "(" expression ")" ";"
     public void procDoWhileStmt() throws Exception {
-        // Implementação em andamento...
+        // do
+        eat(TokenType.DO);
+        // "{"
+        eat(TokenType.OPEN_BRACE);
+        // stmt-list
+        procStmtList();
+        // "}"
+        eat(TokenType.CLOSE_BRACE);
+        // while
+        eat(TokenType.WHILE);
+        // "("
+        eat(TokenType.OPEN_PAREN);
+        // expression
+        procExpression();
+        // ")"
+        eat(TokenType.CLOSE_PAREN);
+        // ";"
+        eat(TokenType.SEMICOLON);
     }
 
+    // while-stmt ::= while "(" expression ")" do "{" stmt-list "}"
     public void procWhileStmt() throws Exception {
-        // Implementação em andamento...
+        // while
+        eat(TokenType.WHILE);
+        // "("
+        eat(TokenType.OPEN_PAREN);
+        // expression
+        procExpression();
+        // ")"
+        eat(TokenType.CLOSE_PAREN);
+        // do
+        eat(TokenType.DO);
+        // "{"
+        eat(TokenType.OPEN_BRACE);
+        // stmt-list
+        procStmtList();
+        // "}"
+        eat(TokenType.CLOSE_BRACE);
     }
 
+    // read-stmt ::= scan "(" identifier ")" ";"
     public void procReadStmt() throws Exception {
-        // Implementação em andamento...
+        // scan
+        eat(TokenType.SCAN);
+        // "("
+        eat(TokenType.CLOSE_PAREN);
+        // identifier
+        eat(TokenType.IDENTIFIER);
+        // ")"
+        eat(TokenType.CLOSE_PAREN);
+        // ";"
+        eat(TokenType.SEMICOLON);
     }
 
+    // write-stmt ::= print "(" simple-expr ")" ";"
     public void procWriteStmt() throws Exception {
-        // Implementação em andamento...
+        // print
+        eat(TokenType.PRINT);
+        // "("
+        eat(TokenType.OPEN_PAREN);
+        // simple-expr
+        procSimpleExpr();
+        // ")"
+        eat(TokenType.CLOSE_PAREN);
+        // ";"
+        eat(TokenType.SEMICOLON);
     }
 
     public void procExpression() throws Exception {
