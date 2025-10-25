@@ -117,8 +117,30 @@ public class Parser {
         }
     }
 
+    // stmt ::= assign-stmt | if-stmt | while-stmt | dowhile-stmt | read-stmt |  write-stmt
     public void procStmt() throws Exception {
-        // Implementação em andamento...
+        // assign-stmt | if-stmt | while-stmt | dowhile-stmt | read-stmt | write-stmt
+        if (check(TokenType.IDENTIFIER)) {
+            // assign-stmt
+            procAssignStmt();
+        } else if (check(TokenType.IF)) {
+            // if-stmt
+            procIfStmt();
+        } else if (check(TokenType.WHILE)) {
+            // while-stmt
+            procWhileStmt();
+        } else if (check(TokenType.DO)) {
+            // dowhile-stmt
+            procDoWhileStmt();
+        } else if (check(TokenType.SCAN)) {
+            // read-stmt
+            procReadStmt();
+        } else if (check(TokenType.PRINT)) {
+            // write-stmt
+            procWriteStmt();
+        } else {
+            // Recuperacao de erro...
+        }
     }
 
     public void procAssignStmt() throws Exception {
