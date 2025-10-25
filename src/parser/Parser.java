@@ -54,22 +54,26 @@ public class Parser {
         }
     }
 
-    // process :: program EOF
+    // process :: program "EOF"
     public void procProcess() throws Exception {
+        // program
         procProgram();
+        // "EOF"
         eat(TokenType.EOF);
     }
 
     // program ::= app body
     public void procProgram() throws Exception {
+        // "app"
         eat(TokenType.APP);
+        // body
         procBody();
     }
 
     // body ::= [decl-list] "{" stmt-list "}"
     public void procBody() throws Exception {
         // [decl-list]
-        if (check(TokenType.INT, TokenType.REAL, TokenType.CHAR)) {
+        if (check(TokenType.INT, TokenType.REAL, TokenType.CHAR, TokenType.STRING)) {
             procDeclList();
         }
         // "{"
@@ -80,8 +84,14 @@ public class Parser {
         eat(TokenType.CLOSE_BRACE);
     }
 
+    // decl-list ::= decl {decl}
     public void procDeclList() throws Exception {
-        // Implementação em andamento...
+        // decl
+        procDecl();
+        // {decl}
+        while (check(TokenType.INT, TokenType.REAL, TokenType.CHAR, TokenType.STRING)) {
+            procDecl();
+        }
     }
 
     public void procDecl() throws Exception {
