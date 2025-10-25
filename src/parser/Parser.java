@@ -117,7 +117,8 @@ public class Parser {
         }
     }
 
-    // stmt ::= assign-stmt | if-stmt | while-stmt | dowhile-stmt | read-stmt |  write-stmt
+    // stmt ::= assign-stmt | if-stmt | while-stmt | dowhile-stmt | read-stmt |
+    // write-stmt
     public void procStmt() throws Exception {
         // assign-stmt | if-stmt | while-stmt | dowhile-stmt | read-stmt | write-stmt
         if (check(TokenType.IDENTIFIER)) {
@@ -142,6 +143,7 @@ public class Parser {
             // Recuperacao de erro...
         }
     }
+
     // assign-stmt ::= identifier "=" simple_expr ";"
     public void procAssignStmt() throws Exception {
         // identifier
@@ -153,6 +155,7 @@ public class Parser {
         // ";"
         eat(TokenType.SEMICOLON);
     }
+
     // if-stmt ::= if "(" expression ")" "{" stmt-list "}" if-stmtZ
     public void procIfStmt() throws Exception {
         // if
@@ -172,10 +175,11 @@ public class Parser {
         // if-stmtZ
         procIfStmtZ();
     }
+
     // if-stmtZ ::= lambda | else "{" stmt-list "}"
     public void procIfStmtZ() throws Exception {
         // else "{" stmt-list "}"
-        if(check(TokenType.ELSE)){
+        if (check(TokenType.ELSE)) {
             // else
             eat(TokenType.ELSE);
             // "{"
@@ -188,20 +192,74 @@ public class Parser {
         // lambda
     }
 
+    // dowhile-stmt ::= do "{" stmt-list "}" while "(" expression ")" ";"
     public void procDoWhileStmt() throws Exception {
-        // Implementação em andamento...
+        // do
+        eat(TokenType.DO);
+        // "{"
+        eat(TokenType.OPEN_BRACE);
+        // stmt-list
+        procStmtList();
+        // "}"
+        eat(TokenType.CLOSE_BRACE);
+        // while
+        eat(TokenType.WHILE);
+        // "("
+        eat(TokenType.OPEN_PAREN);
+        // expression
+        procExpression();
+        // ")"
+        eat(TokenType.CLOSE_PAREN);
+        // ";"
+        eat(TokenType.SEMICOLON);
     }
 
+    // while-stmt ::= while "(" expression ")" do "{" stmt-list "}"
     public void procWhileStmt() throws Exception {
-        // Implementação em andamento...
+        // while
+        eat(TokenType.WHILE);
+        // "("
+        eat(TokenType.OPEN_PAREN);
+        // expression
+        procExpression();
+        // ")"
+        eat(TokenType.CLOSE_PAREN);
+        // do
+        eat(TokenType.DO);
+        // "{"
+        eat(TokenType.OPEN_BRACE);
+        // stmt-list
+        procStmtList();
+        // "}"
+        eat(TokenType.CLOSE_BRACE);
     }
 
+    // read-stmt ::= scan "(" identifier ")" ";"
     public void procReadStmt() throws Exception {
-        // Implementação em andamento...
+        // scan
+        eat(TokenType.SCAN);
+        // "("
+        eat(TokenType.CLOSE_PAREN);
+        // identifier
+        eat(TokenType.IDENTIFIER);
+        // ")"
+        eat(TokenType.CLOSE_PAREN);
+        // ";"
+        eat(TokenType.SEMICOLON);
     }
 
+    // write-stmt ::= print "(" simple-expr ")" ";"
     public void procWriteStmt() throws Exception {
-        // Implementação em andamento...
+        // print
+        eat(TokenType.PRINT);
+        // "("
+        eat(TokenType.OPEN_PAREN);
+        // simple-expr
+        procSimpleExpr();
+        // ")"
+        eat(TokenType.CLOSE_PAREN);
+        // ";"
+        eat(TokenType.SEMICOLON);
     }
 
     public void procExpression() throws Exception {
