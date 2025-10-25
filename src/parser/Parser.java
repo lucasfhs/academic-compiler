@@ -106,8 +106,15 @@ public class Parser {
         // Implementação em andamento...
     }
 
+    // stmt-list ::= stmt {stmt}
     public void procStmtList() throws Exception {
-        // Implementação em andamento...
+        // stmt
+        procStmt();
+        // {stmt}
+        while (check(TokenType.IDENTIFIER, TokenType.IF, TokenType.DO, TokenType.WHILE,
+                TokenType.SCAN, TokenType.PRINT)) {
+            procStmt();
+        }
     }
 
     public void procStmt() throws Exception {
