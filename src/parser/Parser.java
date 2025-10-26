@@ -3,7 +3,6 @@ package parser;
 import lexer.token.TokenType;
 import lexer.Lexer;
 import lexer.token.Token;
-import lexer.token.TokenType;
 
 public class Parser {
 
@@ -35,11 +34,6 @@ public class Parser {
         }
     }
 
-    // Sinceramente não vejo uso para esses dois metodos... mas tinha no do andrei
-    // vamos deixar...
-
-    // Deixa o trem sow! ´_`
-
     private boolean check(TokenType... types) {
         for (TokenType type : types) {
             if (current.getType() == type)
@@ -47,15 +41,6 @@ public class Parser {
         }
 
         return false;
-    }
-
-    private boolean match(TokenType... types) throws Exception {
-        if (check(types)) {
-            advance();
-            return true;
-        } else {
-            return false;
-        }
     }
 
     // process ::= program "EOF"
@@ -136,7 +121,9 @@ public class Parser {
             // "char"
             eat(TokenType.CHAR);
         } else {
-            throw new Exception("Tipo esperado (int, real, string, char), encontrado: " + current);
+            throw new Exception(
+                    "Expected token of types: INT | REAL | STRING | CHAR "
+                            + ", found " + current.getType());
         }
     }
 
@@ -174,7 +161,9 @@ public class Parser {
             // write-stmt
             procWriteStmt();
         } else {
-            // Recuperacao de erro...
+            throw new Exception(
+                    "Expected token of types: IDENTIFIER | INT_LITERAL | REAL_LITERAL | CHAR_LITERAL | STR_LITERAL | OPEN_PAREN"
+                            + ", found " + current.getType());
         }
     }
 
@@ -403,7 +392,9 @@ public class Parser {
             // ")"
             eat(TokenType.CLOSE_PAREN);
         } else {
-            // Recuperacao de erro...
+            throw new Exception(
+                    "Expected token of types: IDENTIFIER | INT_LITERAL | REAL_LITERAL | CHAR_LITERAL | STR_LITERAL | OPEN_PAREN"
+                            + ", found " + current.getType());
         }
     }
 
@@ -428,7 +419,9 @@ public class Parser {
             // ">="
             eat(TokenType.GREATER_EQUAL);
         } else {
-            // Recuperação de erro...
+            throw new Exception(
+                    "Expected token of types: EQUAL | NOT_EQUAL | LESS | LESS_EQUAL | GREATER | GREATER_EQUAL"
+                            + ", found " + current.getType());
         }
     }
 
@@ -444,7 +437,8 @@ public class Parser {
             // "||"
             eat(TokenType.OR);
         } else {
-            // Recuperacao de erro...
+            throw new Exception("Expected token of types: PLUS | MINUS | OR"
+                    + ", found " + current.getType());
         }
     }
 
@@ -460,7 +454,8 @@ public class Parser {
             // "&&"
             eat(TokenType.AND);
         } else {
-            // Recuperacao de erro
+            throw new Exception("Expected token of types: MULTIPLY | DIVIDE | AND"
+                    + ", found " + current.getType());
         }
     }
 
@@ -479,7 +474,8 @@ public class Parser {
             // literal
             eat(TokenType.STR_LITERAL);
         } else {
-            // Recuperacao de erro...
+            throw new Exception("Expected token of types: INT_LITERAL | REAL_LITERAL | CHAR_LITERAL | STR_LITERAL"
+                    + ", found " + current.getType());
         }
     }
 }
