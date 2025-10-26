@@ -293,7 +293,7 @@ public class Parser {
         procExpressionZ();
     }
 
-    // expressionZ ::= lambda | relop simple-expr
+    // expressionZ ::= lambda | relop simple-expr expressionZ
     public void procExpressionZ() throws Exception {
         // relop simple-expr
         if (check(TokenType.EQUAL, TokenType.NOT_EQUAL, TokenType.LESS,
@@ -302,6 +302,8 @@ public class Parser {
             procRelop();
             // simple-expr
             procSimpleExpr();
+            // expressionZ
+            procExpressionZ();
         }
         // lambda
     }
