@@ -1,0 +1,23 @@
+app
+int num, cont, serie;
+{
+    print("Informe a quantidade de termos: ");
+    scan(num);
+
+    if (num < 0) {
+        print("Numero invalido");
+    }
+    else {
+        cont = 1;
+        serie = -1;
+
+        //calcula serie
+        while (cont <= num) do {
+            serie = serie + cont;
+            cont = cont + 1;
+        }
+
+        print("O resultado e: ");
+        print(serie);
+    }
+}

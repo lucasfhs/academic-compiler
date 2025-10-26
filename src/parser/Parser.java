@@ -28,13 +28,16 @@ public class Parser {
             advance();
         } else {
             // Implementar recuperação de erro...
-            System.out.println("Expected (..., " + type + ", ..., ...), found " + current);
+            // System.out.println("Expected (..., " + type + ", ..., ...), found " + current);
+            throw new Exception("Expected token of type " + type + ", found " + current.getType());
             // reportError();
         }
     }
 
     // Sinceramente não vejo uso para esses dois metodos... mas tinha no do andrei
     // vamos deixar...
+    
+    // Deixa o trem sow! ´_`
 
     private boolean check(TokenType... types) {
         for (TokenType type : types) {
@@ -54,7 +57,7 @@ public class Parser {
         }
     }
 
-    // process :: program "EOF"
+    // process ::= program "EOF"
     public void procProcess() throws Exception {
         // program
         procProgram();
@@ -94,16 +97,46 @@ public class Parser {
         }
     }
 
+    // decl ::= type ident-list ";"
     public void procDecl() throws Exception {
-        // Implementação em andamento...
+        // type
+        procType();
+        // ident-list
+        procIdentList();
+        // ";"
+        eat(TokenType.SEMICOLON);
     }
 
+    // ident-list ::= identifier {"," identifier}
     public void procIdentList() throws Exception {
-        // Implementação em andamento...
+        // identifier
+        eat(TokenType.IDENTIFIER);
+        // {"," identifier}
+        while (check(TokenType.COMMA)) {
+            // ","
+            eat(TokenType.COMMA);
+            // identifier
+            eat(TokenType.IDENTIFIER);
+        }
     }
 
+    // type ::= "int" | "real" | "string" | "char"
     public void procType() throws Exception {
-        // Implementação em andamento...
+        if (check(TokenType.INT)) {
+            // "int"
+            eat(TokenType.INT);
+        } else if (check(TokenType.REAL)) {
+            // "real"
+            eat(TokenType.REAL);
+        } else if (check(TokenType.STRING)) {
+            // "string"
+            eat(TokenType.STRING);
+        } else if (check(TokenType.CHAR)) {
+            // "char"
+            eat(TokenType.CHAR);
+        } else {
+            throw new Exception("Tipo esperado (int, real, string, char), encontrado: " + current);
+        }
     }
 
     // stmt-list ::= stmt {stmt}
@@ -239,7 +272,7 @@ public class Parser {
         // scan
         eat(TokenType.SCAN);
         // "("
-        eat(TokenType.CLOSE_PAREN);
+        eat(TokenType.OPEN_PAREN);
         // identifier
         eat(TokenType.IDENTIFIER);
         // ")"
@@ -262,55 +295,180 @@ public class Parser {
         eat(TokenType.SEMICOLON);
     }
 
+    // expression ::= simple-expr expressionZ
     public void procExpression() throws Exception {
-        // Implementação em andamento...
+        // simple-expr
+        procSimpleExpr();
+        // expressionZ
+        procExpressionZ();
     }
 
+    // expressionZ ::= lambda | relop simple-expr
+    public void procExpressionZ() throws Exception {
+        // relop simple-expr
+        if (check(TokenType.EQUAL, TokenType.NOT_EQUAL, TokenType.LESS, 
+                  TokenType.LESS_EQUAL, TokenType.GREATER, TokenType.GREATER_EQUAL)) {
+            // relop
+            procRelop();
+            // simple-expr
+            procSimpleExpr();
+        }
+        // lambda
+    }
+
+    // simple-expr ::= term simple-exprZ
     public void procSimpleExpr() throws Exception {
-        // Implementação em andamento...
+        // term
+        procTerm();
+        // simple-exprZ
+        procSimpleExprZ();
     }
 
+    // simple-exprZ ::= lambda | addop term simple-exprZ
+    public void procSimpleExprZ() throws Exception {
+        // addop term simple-exprZ
+        if (check(TokenType.PLUS, TokenType.MINUS, TokenType.OR)) {
+            // addop
+            procAddOp();
+            // term
+            procTerm();
+            // simple-exprZ
+            procSimpleExprZ();
+        }
+        // lambda
+    }
+
+    // term ::= factorA termZ
     public void procTerm() throws Exception {
-        // Implementação em andamento...
+        // factorA
+        procFactorA();
+        // termZ
+        procTermZ();
     }
 
+    // termZ ::= lambda | mulop factorA termZ
+    public void procTermZ() throws Exception {
+        // mulop factorA termZ
+        if (check(TokenType.MULTIPLY, TokenType.DIVIDE, TokenType.AND)) {
+            // mulop
+            procMulOp();
+            // factorA
+            procFactorA();
+            // termZ
+            procTermZ();
+        }
+        // lambda
+    }
+
+    // factorA ::= factor | "!" factor | "-" factor
     public void procFactorA() throws Exception {
-        // Implementação em andamento...
+        // "!" factor
+        if (check(TokenType.NOT)) {
+            // "!"
+            eat(TokenType.NOT);
+            // factor
+            procFactor();
+        }
+        // "-" factor
+        else if (check(TokenType.MINUS)) {
+            // "-"
+            eat(TokenType.MINUS);
+            // factor
+            procFactor();
+        }
+        // factor
+        else {
+            procFactor();
+        }
     }
 
+    // factor ::= identifier | constant | "(" expression ")"
     public void procFactor() throws Exception {
-        // Implementação em andamento...
+        // identifier
+        if (check(TokenType.IDENTIFIER)) {
+            eat(TokenType.IDENTIFIER);
+        }
+        // constant
+        else if (check(TokenType.INT_LITERAL, TokenType.REAL_LITERAL, 
+                       TokenType.CHAR_LITERAL, TokenType.STR_LITERAL)) {
+            procConstant();
+        }
+        // "(" expression ")"
+        else {
+            // "("
+            eat(TokenType.OPEN_PAREN);
+            // expression
+            procExpression();
+            // ")"
+            eat(TokenType.CLOSE_PAREN);
+        }
     }
 
+    // relop ::= "==" | "!=" | "<" | "<=" | ">" | ">="
     public void procRelop() throws Exception {
-        // Implementação em andamento...
+        if (check(TokenType.EQUAL)) {
+            // "=="
+            eat(TokenType.EQUAL);
+        } else if (check(TokenType.NOT_EQUAL)) {
+            // "!="
+            eat(TokenType.NOT_EQUAL);
+        } else if (check(TokenType.LESS)) {
+            // "<"
+            eat(TokenType.LESS);
+        } else if (check(TokenType.LESS_EQUAL)) {
+            // "<="
+            eat(TokenType.LESS_EQUAL);
+        } else if (check(TokenType.GREATER)) {
+            // ">"
+            eat(TokenType.GREATER);
+        } else {
+            // ">="
+            eat(TokenType.GREATER_EQUAL);
+        }
     }
 
+    // addop ::= "+" | "-" | "||"
     public void procAddOp() throws Exception {
-        // Implementação em andamento...
+        if (check(TokenType.PLUS)) {
+            // "+"
+            eat(TokenType.PLUS);
+        } else if (check(TokenType.MINUS)) {
+            // "-"
+            eat(TokenType.MINUS);
+        } else {
+            // "||"
+            eat(TokenType.OR);
+        }
     }
 
+    // mulop ::= "*" | "/" | "&&"
     public void procMulOp() throws Exception {
-        // Implementação em andamento...
+        if (check(TokenType.MULTIPLY)) {
+            // "*"
+            eat(TokenType.MULTIPLY);
+        } else if (check(TokenType.DIVIDE)) {
+            // "/"
+            eat(TokenType.DIVIDE);
+        } else {
+            // "&&"
+            eat(TokenType.AND);
+        }
     }
 
+    // constant ::= integer_const | real_const | char_const | literal
     public void procConstant() throws Exception {
-        // Implementação em andamento...
-    }
-
-    public void procIntegerConst() throws Exception {
-        // Implementação em andamento...
-    }
-
-    public void procRealConst() throws Exception {
-        // Implementação em andamento...
-    }
-
-    public void procCharonst() throws Exception {
-        // Implementação em andamento...
-    }
-
-    public void procLiteral() throws Exception {
-        // Implementação em andamento...
+        if (check(TokenType.INT_LITERAL)) {
+            // integer_const
+            eat(TokenType.INT_LITERAL);
+        } else if (check(TokenType.REAL_LITERAL)) {
+            // real_const
+            eat(TokenType.REAL_LITERAL);
+        } else if (check(TokenType.CHAR_LITERAL)) {
+            // char_const
+            eat(TokenType.CHAR_LITERAL);
+        } else {
+            // literal
+            eat(TokenType.STR_LITERAL);
+        }
     }
 }
