@@ -28,7 +28,8 @@ public class Parser {
             advance();
         } else {
             // Implementar recuperação de erro...
-            // System.out.println("Expected (..., " + type + ", ..., ...), found " + current);
+            // System.out.println("Expected (..., " + type + ", ..., ...), found " +
+            // current);
             throw new Exception("Expected token of type " + type + ", found " + current.getType());
             // reportError();
         }
@@ -36,7 +37,7 @@ public class Parser {
 
     // Sinceramente não vejo uso para esses dois metodos... mas tinha no do andrei
     // vamos deixar...
-    
+
     // Deixa o trem sow! ´_`
 
     private boolean check(TokenType... types) {
@@ -306,8 +307,8 @@ public class Parser {
     // expressionZ ::= lambda | relop simple-expr
     public void procExpressionZ() throws Exception {
         // relop simple-expr
-        if (check(TokenType.EQUAL, TokenType.NOT_EQUAL, TokenType.LESS, 
-                  TokenType.LESS_EQUAL, TokenType.GREATER, TokenType.GREATER_EQUAL)) {
+        if (check(TokenType.EQUAL, TokenType.NOT_EQUAL, TokenType.LESS,
+                TokenType.LESS_EQUAL, TokenType.GREATER, TokenType.GREATER_EQUAL)) {
             // relop
             procRelop();
             // simple-expr
@@ -389,18 +390,20 @@ public class Parser {
             eat(TokenType.IDENTIFIER);
         }
         // constant
-        else if (check(TokenType.INT_LITERAL, TokenType.REAL_LITERAL, 
-                       TokenType.CHAR_LITERAL, TokenType.STR_LITERAL)) {
+        else if (check(TokenType.INT_LITERAL, TokenType.REAL_LITERAL,
+                TokenType.CHAR_LITERAL, TokenType.STR_LITERAL)) {
             procConstant();
         }
         // "(" expression ")"
-        else {
+        else if (check(TokenType.OPEN_PAREN)) {
             // "("
             eat(TokenType.OPEN_PAREN);
             // expression
             procExpression();
             // ")"
             eat(TokenType.CLOSE_PAREN);
+        } else {
+            // Recuperacao de erro...
         }
     }
 
@@ -421,9 +424,11 @@ public class Parser {
         } else if (check(TokenType.GREATER)) {
             // ">"
             eat(TokenType.GREATER);
-        } else {
+        } else if (check(TokenType.GREATER_EQUAL)) {
             // ">="
             eat(TokenType.GREATER_EQUAL);
+        } else {
+            // Recuperação de erro...
         }
     }
 
@@ -435,9 +440,11 @@ public class Parser {
         } else if (check(TokenType.MINUS)) {
             // "-"
             eat(TokenType.MINUS);
-        } else {
+        } else if (check(TokenType.OR)) {
             // "||"
             eat(TokenType.OR);
+        } else {
+            // Recuperacao de erro...
         }
     }
 
@@ -449,9 +456,11 @@ public class Parser {
         } else if (check(TokenType.DIVIDE)) {
             // "/"
             eat(TokenType.DIVIDE);
-        } else {
+        } else if (check(TokenType.AND)) {
             // "&&"
             eat(TokenType.AND);
+        } else {
+            // Recuperacao de erro
         }
     }
 
@@ -466,9 +475,11 @@ public class Parser {
         } else if (check(TokenType.CHAR_LITERAL)) {
             // char_const
             eat(TokenType.CHAR_LITERAL);
-        } else {
+        } else if (check(TokenType.STR_LITERAL)) {
             // literal
             eat(TokenType.STR_LITERAL);
+        } else {
+            // Recuperacao de erro...
         }
     }
 }
