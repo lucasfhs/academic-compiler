@@ -1,0 +1,34 @@
+app
+real nota, freq;
+string nome, texto, resultado;
+char resp;
+{
+    do {
+        print("Dados do aluno: ");
+        scan(nota);
+        scan(freq);
+        scan(nome);
+
+        if (nota >= 0 && freq >= 0) {
+            resultado = "O resultado do aluno " + nome + " e: ";
+
+            if (nota >= 60 && freq >= 75) {
+                resultado = resultado + "Aprovado";
+            }
+            else {
+                if (nota >= 40 && nota < 60 && freq >= 75) {
+                    resultado = resultado + "Recuperacao";
+                }
+                else {
+                    resultado = resultado + "Reprovado";
+                }
+            }
+        }
+        else {
+            print("Dados invalidos.");
+        }
+
+        print("Deseja continuar?(S/N) ");
+        scan(resp);
+    } while (resp == 'S' || resp == 's');
+}

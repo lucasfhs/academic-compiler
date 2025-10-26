@@ -1,0 +1,24 @@
+app
+real num, soma, media;
+int qtd;
+{
+    soma = 0;
+    qtd = 0;
+
+    do {
+        print("Digite o numero: ");
+        scan(num);
+
+        if (num > 0) {
+            soma = soma + num;
+            qtd = qtd + 1;
+        }
+    } while (num > 0);
+
+    if (qtd > 0) {
+        media = soma / qtd;
+    }
+
+    print("A media e");
+    print(media);
+}

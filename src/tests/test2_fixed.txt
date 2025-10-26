@@ -1,0 +1,20 @@
+app
+real raio, area, volume, lado;
+int result1, teste3;
+
+{
+    print("Entre com o raio:");
+    scan(raio);
+
+    if (raio > 0) {
+        area = 3.0 * raio * raio;
+        volume = (4 * 3.14 * raio * raio * raio) / 3;
+        print("Area: ");
+        print(area);
+        print("Volume: ");
+        print(volume);
+    }
+
+    result1 = -volume;
+    print(!(volume > 0 && area > 0 || raio == 0));
+}

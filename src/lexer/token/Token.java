@@ -27,4 +27,13 @@ public class Token {
         this.value = value;
     }
 
+    // Print token information
+    @Override
+    public String toString() {
+        return "Token{" +
+                "type=" + type +
+                ", value=" + value +
+                '}';
+    }
+
 }
