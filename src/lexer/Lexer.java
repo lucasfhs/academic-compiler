@@ -228,7 +228,7 @@ public class Lexer implements AutoCloseable {
                     }
                 } else {
                     lexeme.append((char) ch);
-                    throw new Exception("Invalid token '" + lexeme.toString() + "' at line " + getLine());
+                    throw new Exception(String.format("Invalid token '%s' at line %d", lexeme.toString(), getLine()));
                 }
         }
 
