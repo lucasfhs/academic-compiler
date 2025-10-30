@@ -17,7 +17,7 @@ public class Parser {
     }
 
     private void advance() throws Exception {
-        System.out.println("Found " + current);
+        System.out.println("Eat " + current);
         previous = current;
         current = lex.scan();
     }
@@ -26,11 +26,9 @@ public class Parser {
         if (type == current.getType()) {
             advance();
         } else {
-            // Implementar recuperação de erro...
-            // System.out.println("Expected (..., " + type + ", ..., ...), found " +
-            // current);
-            throw new Exception("Expected token of type " + type + ", found " + current.getType());
-            // reportError();
+            throw new Exception(
+                    "Expected token of type " + type + ", found " + current.getType() + " in line " + lex.getLine()
+                            + ".");
         }
     }
 
@@ -293,7 +291,7 @@ public class Parser {
         procExpressionZ();
     }
 
-    // expressionZ ::= lambda | relop simple-expr
+    // expressionZ ::= lambda | relop simple-expr expressionZ
     public void procExpressionZ() throws Exception {
         // relop simple-expr
         if (check(TokenType.EQUAL, TokenType.NOT_EQUAL, TokenType.LESS,
@@ -302,6 +300,8 @@ public class Parser {
             procRelop();
             // simple-expr
             procSimpleExpr();
+            // expressionZ
+            procExpressionZ();
         }
         // lambda
     }

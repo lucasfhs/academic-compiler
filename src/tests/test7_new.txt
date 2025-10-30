@@ -1,0 +1,35 @@
+app
+real volume, area, raio;
+int contador;
+char resp;
+string msg;
+
+{
+    print("Teste de expressoes logicas e aritmeticas:");
+
+    scan(volume); 
+    scan(area); 
+    scan(raio);
+
+    // Expressão composta com precedência e operadores lógicos
+    if (!(volume > 0 && area > 0 || raio == 0)) {
+        msg = "Valores invalidos detectados.";
+        print(msg);
+    }
+    else {
+        contador = 0;
+        do {
+            contador = contador + 1;
+            print("Iteracao: " + contador);
+        } while (contador < 3);
+
+        while (volume > 0 && area > 0) do {
+            volume = volume - 1;
+            area = area - 2;
+        }
+
+        print("Processamento concluido.");
+    }
+
+    print("Fim do programa.");
+}

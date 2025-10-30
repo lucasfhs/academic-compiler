@@ -63,7 +63,7 @@ public enum TokenType {
 
     @Override
     public String toString() {
-        return name() + ": " + this.description;
+        return name();
     }
 
     public static TokenType fromDescription(String description) {

@@ -266,6 +266,8 @@ public class Lexer implements AutoCloseable {
             } else {
                 ungetc(next);
             }
+        } else { // Descarta o último caractere lido que não é parte do número
+            ungetc(c);
         }
 
         return sb.toString();
