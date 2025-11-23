@@ -121,7 +121,7 @@ public class Parser {
         } else {
             throw new Exception(
                     "Expected token of types: INT | REAL | STRING | CHAR "
-                            + ", found " + current.getType());
+                            + ", found " + current.getType() + " in line " + lex.getLine() + ".");
         }
     }
 
@@ -161,7 +161,7 @@ public class Parser {
         } else {
             throw new Exception(
                     "Expected token of types: IDENTIFIER | INT_LITERAL | REAL_LITERAL | CHAR_LITERAL | STR_LITERAL | OPEN_PAREN"
-                            + ", found " + current.getType());
+                            + ", found " + current.getType() + " in line " + lex.getLine() + ".");
         }
     }
 
@@ -394,7 +394,7 @@ public class Parser {
         } else {
             throw new Exception(
                     "Expected token of types: IDENTIFIER | INT_LITERAL | REAL_LITERAL | CHAR_LITERAL | STR_LITERAL | OPEN_PAREN"
-                            + ", found " + current.getType());
+                            + ", found " + current.getType() + " in line " + lex.getLine() + ".");
         }
     }
 
@@ -421,7 +421,7 @@ public class Parser {
         } else {
             throw new Exception(
                     "Expected token of types: EQUAL | NOT_EQUAL | LESS | LESS_EQUAL | GREATER | GREATER_EQUAL"
-                            + ", found " + current.getType());
+                            + ", found " + current.getType() + " in line " + lex.getLine() + ".");
         }
     }
 
@@ -438,7 +438,7 @@ public class Parser {
             eat(TokenType.OR);
         } else {
             throw new Exception("Expected token of types: PLUS | MINUS | OR"
-                    + ", found " + current.getType());
+                    + ", found " + current.getType() + " in line " +  lex.getLine() + ".");
         }
     }
 
@@ -455,7 +455,7 @@ public class Parser {
             eat(TokenType.AND);
         } else {
             throw new Exception("Expected token of types: MULTIPLY | DIVIDE | AND"
-                    + ", found " + current.getType());
+                    + ", found " + current.getType() + " in line " + lex.getLine() + ".");
         }
     }
 
@@ -475,7 +475,7 @@ public class Parser {
             eat(TokenType.STR_LITERAL);
         } else {
             throw new Exception("Expected token of types: INT_LITERAL | REAL_LITERAL | CHAR_LITERAL | STR_LITERAL"
-                    + ", found " + current.getType());
+                    + ", found " + current.getType() + " in line " + lex.getLine() + ".");
         }
     }
 }

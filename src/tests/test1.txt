@@ -1,4 +1,4 @@
-app temperatura
+app
 real farenheit, celcius;
 {
     print("Entre com a temperatura em Farenheit: ");
