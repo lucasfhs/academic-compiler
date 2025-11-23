@@ -1,0 +1,23 @@
+app
+//Um programa para calcular o maior valor
+int a, b, c, maior;
+{
+    scan(a);
+    scan(b);
+    scan(c);
+
+    if (a > b && a > c) {
+        maior = a;
+    }
+    else {
+        if (b > c) {
+            maior = b;
+        }
+        else {
+            maior = c;
+        }
+    }
+
+    print("Maior: ");
+    print(maior);
+}

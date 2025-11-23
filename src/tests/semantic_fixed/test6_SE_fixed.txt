@@ -1,7 +1,7 @@
 app
-real nota, freq;
-string nome, texto, resultado;
-char resp;
+    real nota, freq;
+    string nome, texto, resultado;
+    char resp;
 {
     do {
         print("Dados do aluno: ");

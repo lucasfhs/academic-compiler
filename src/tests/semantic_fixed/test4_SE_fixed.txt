@@ -1,5 +1,5 @@
 app
-int num, cont, serie;
+    int num, cont, serie;
 {
     print("Informe a quantidade de termos: ");
     scan(num);

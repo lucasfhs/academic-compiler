@@ -1,9 +1,8 @@
-app
+app temperatura
 real farenheit, celcius;
 {
     print("Entre com a temperatura em Farenheit: ");
     scan(farenheit);
     celcius = (5.0/9.0) * (farenheit - 32);
-    print("A temperatura em Celcius e ");
-    print(celcius);
+    print("A temperatura em Celcius e "); print(celcius);
 }

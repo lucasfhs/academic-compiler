@@ -1,13 +1,13 @@
 app
-real raio, area, volume, lado;
-int result1, teste3;
+    real raio, area, volume, lado;
+    int result1, teste3;
 
 {
     print("Entre com o raio:");
     scan(raio);
 
     if (raio > 0) {
-        area = 3.0 * raio * raio;
+        Area = 3.0 * raio * radio;
         volume = (4 * 3.14 * raio * raio * raio) / 3;
         print("Area: ");
         print(area);
@@ -15,6 +15,6 @@ int result1, teste3;
         print(volume);
     }
 
-    result1 = -volume;
+    geometria = -volume;
     print(!(volume > 0 && area > 0 || raio == 0));
 }

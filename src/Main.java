@@ -45,6 +45,7 @@ public class Main {
             // symbolTable.printSymbolTable();
             Parser parser = new Parser(lex);
             parser.procProcess();
+            System.out.println("Parsing completed successfully.");
         } catch (Exception e) {
             System.out.println("\n\n");
             System.out.println(e.getMessage());

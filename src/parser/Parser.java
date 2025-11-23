@@ -17,7 +17,7 @@ public class Parser {
     }
 
     private void advance() throws Exception {
-        System.out.println("Eat " + current);
+        //System.out.println("Eat " + current);
         previous = current;
         current = lex.scan();
     }

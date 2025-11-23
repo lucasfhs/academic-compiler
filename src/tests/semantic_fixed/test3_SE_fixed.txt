@@ -1,4 +1,5 @@
 app
+//Um programa para calcular o maior valor
 int a, b, c, maior;
 {
     scan(a);
